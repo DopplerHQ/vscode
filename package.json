@@ -89,6 +89,16 @@
     },
     "commands": [
       {
+        "command": "doppler.install",
+        "category": "Doppler",
+        "title": "Install CLI"
+      },
+      {
+        "command": "doppler.update",
+        "category": "Doppler",
+        "title": "Update CLI"
+      },
+      {
         "command": "doppler.login",
         "category": "Doppler",
         "title": "Login"
