@@ -32,6 +32,16 @@
   ],
   "main": "./extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Doppler",
+      "properties": {
+        "doppler.autocomplete.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Autocomplete environment variables with secrets from Doppler."
+        }
+      }
+    },
     "commands": [
       {
         "command": "doppler.login",
