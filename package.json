@@ -1,0 +1,85 @@
+{
+  "name": "@dopplerhq/vscode",
+  "private": true,
+  "displayName": "Doppler",
+  "description": "Official Doppler VS Code Plugin.",
+  "author": "@dopplerhq",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/dopplerhq/vscode",
+  "icon": "media/logo.png",
+  "galleryBanner": {
+    "color": "#000000",
+    "theme": "dark"
+  },
+  "qna": false,
+  "bugs": {
+    "url": "https://github.com/dopplerhq/vscode/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dopplerhq/vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.65.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "scripts": {
+    "lint": "standard --fix",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js",
+    "package": "npm run lint && vsce package",
+    "install-package": "code --install-extension",
+    "login": "vsce login",
+    "publish": "npm install && npm run lint && vsce package && vsce publish"
+  },
+  "publisher": "dopplerhq",
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.65.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "standard": "^17.0.0",
+    "typescript": "^4.7.4",
+    "vsce": "^2.10.0"
+  },
+  "standard": {
+    "ignore": [
+      "/test/suite/examples/**"
+    ]
+  },
+  "keywords": [
+    "doppler",
+    "secretops",
+    "dotenv",
+    "dotenv-vault",
+    "environment variables",
+    "vault",
+    "env",
+    ".env",
+    "environment",
+    "variables",
+    "config",
+    "settings",
+    "official",
+    "development",
+    "productivity",
+    "secrets",
+    "sync"
+  ],
+  "dependencies": {
+    "axios": "^1.2.1",
+    "yaml": "^2.1.3"
+  }
+}
