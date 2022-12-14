@@ -39,6 +39,11 @@
           "type": "boolean",
           "default": false,
           "description": "Autocomplete environment variables with secrets from Doppler."
+        },
+        "doppler.hover.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show secret from Doppler when hovering over an environment variable."
         }
       }
     },

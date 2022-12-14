@@ -1,4 +1,8 @@
-const plugins = [require("./lib/commands"), require("./lib/autocomplete")];
+const plugins = [
+  require("./lib/commands"),
+  require("./lib/autocomplete"),
+  require("./lib/hover"),
+];
 
 module.exports.activate = function (context) {
   for (const plugin of plugins) {
