@@ -31,6 +31,30 @@
     "*"
   ],
   "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "doppler.login",
+        "category": "Doppler",
+        "title": "Login"
+      },
+      {
+        "command": "doppler.logout",
+        "category": "Doppler",
+        "title": "Logout"
+      },
+      {
+        "command": "doppler.setup",
+        "category": "Doppler",
+        "title": "Setup"
+      },
+      {
+        "command": "doppler.documentation",
+        "category": "Doppler",
+        "title": "Documentation"
+      }
+    ]
+  },
   "scripts": {
     "lint": "standard --fix",
     "pretest": "npm run lint",
