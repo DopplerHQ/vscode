@@ -46,6 +46,47 @@
         }
       }
     },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "doppler-explorer",
+          "title": "Doppler",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "doppler-explorer": [
+        {
+          "id": "doppler-explorer",
+          "name": "Doppler",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "doppler-explorer",
+        "contents": "Welcome to Doppler 🎉\nYou will now be able to view, edit, and save your Doppler secrets without leaving VS Code. To get started, connect to Doppler by logging in.\n[Setup Doppler](command:doppler.setup)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "doppler.explorer.refresh",
+          "when": "view == doppler-explorer",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "doppler.explorer.editor.config.dashboard",
+          "args": "",
+          "group": "navigation",
+          "when": "resourceScheme == doppler"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "doppler.login",
@@ -66,6 +107,17 @@
         "command": "doppler.documentation",
         "category": "Doppler",
         "title": "Documentation"
+      },
+      {
+        "command": "doppler.explorer.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "doppler.explorer.editor.config.dashboard",
+        "category": "Doppler",
+        "title": "Open Dashboard",
+        "icon": "$(link-external)"
       }
     ]
   },
