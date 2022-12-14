@@ -2,6 +2,7 @@ const plugins = [
   require("./lib/commands"),
   require("./lib/autocomplete"),
   require("./lib/hover"),
+  require("./lib/explorer"),
 ];
 
 module.exports.activate = function (context) {
