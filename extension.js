@@ -1,4 +1,4 @@
-const plugins = [];
+const plugins = [require("./lib/commands")];
 
 module.exports.activate = function (context) {
   for (const plugin of plugins) {
