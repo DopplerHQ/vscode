@@ -30,7 +30,7 @@
   "activationEvents": [
     "*"
   ],
-  "main": "./extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "title": "Doppler",
@@ -133,13 +133,14 @@
     ]
   },
   "scripts": {
-    "lint": "standard --fix",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js",
-    "package": "npm run lint && vsce package",
-    "install-package": "code --install-extension",
+    "lint": "eslint \"src/**/*.ts\"",
+    "compile": "npm run lint && tsc -p .",
+    "watch": "npm run lint && tsc -watch -p .",
+    "test": "npm run compile && node ./out/test/runTest.js",
+    "package": "npm run compile && vsce package",
+    "install-package": "npm run compile && code --install-extension",
     "login": "vsce login",
-    "publish": "npm install && npm run lint && vsce package && vsce publish"
+    "publish": "npm install && vsce package && vsce publish"
   },
   "publisher": "dopplerhq",
   "devDependencies": {
@@ -148,6 +149,8 @@
     "@types/node": "16.x",
     "@types/vscode": "^1.65.0",
     "@vscode/test-electron": "^2.1.5",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.18.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
@@ -157,7 +160,7 @@
   },
   "standard": {
     "ignore": [
-      "/test/suite/examples/**"
+      "/out/test/suite/examples/**"
     ]
   },
   "keywords": [
