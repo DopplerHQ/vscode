@@ -5,14 +5,9 @@ import { exec } from "child_process";
 
 const execAsync = util.promisify(exec);
 
-class DopplerTerminalError extends Error {
-  constructor(...args: any[]) {
-    super(...args);
-    this.name = "DopplerTerminalError";
-  }
-}
-
 export default class DopplerTerminal {
+  private outputChannel = vscode.window.createOutputChannel(`Doppler`);
+
   public workingDirectory(): string {
     // Use the root if there aren't any active workspace directories
     if (vscode.workspace.workspaceFolders === undefined) {
@@ -46,13 +41,16 @@ export default class DopplerTerminal {
   public async run(command: string, options: any = {}): Promise<string> {
     options.cwd = this.workingDirectory();
 
-    const { stdout, stderr } = await execAsync(command, options);
+    const response = await execAsync(command, options);
+    const stdout = response.stdout.toString().trim();
+    const stderr = response.stderr.toString().trim();
 
     if (stderr.length > 0) {
-      throw new DopplerTerminalError(stderr.toString());
+      this.outputChannel.append(stderr);
+      this.outputChannel.show();
     }
 
-    return stdout.toString().trim();
+    return stdout;
   }
 
   public async prompt(command: string) {
