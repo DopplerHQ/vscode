@@ -8,6 +8,7 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/dopplerhq/vscode",
   "icon": "media/logo.png",
+  "pricing": "Free",
   "galleryBanner": {
     "color": "#000000",
     "theme": "dark"
@@ -28,7 +29,7 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -137,10 +138,10 @@
     "compile": "npm run lint && tsc -p .",
     "watch": "npm run lint && tsc -watch -p .",
     "test": "npm run compile && node ./out/test/runTest.js",
-    "package": "npm run compile && vsce package",
-    "install-package": "npm run compile && code --install-extension",
+    "package": "npm run compile && vsce package --out=doppler.vsix",
+    "install-package": "npm run package && code --install-extension=doppler.vsix && rm doppler.vsix",
     "login": "vsce login",
-    "publish": "npm install && vsce package && vsce publish"
+    "publish": "npm install && npm run package && vsce publish --packagePath=doppler.vsix"
   },
   "publisher": "dopplerhq",
   "devDependencies": {
@@ -148,15 +149,15 @@
     "@types/mocha": "^9.1.1",
     "@types/node": "16.x",
     "@types/vscode": "^1.65.0",
-    "@vscode/test-electron": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/test-electron": "^2.1.5",
+    "@vscode/vsce": "^2.15.0",
     "eslint": "^8.18.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
     "standard": "^17.0.0",
-    "typescript": "^4.7.4",
-    "vsce": "^2.10.0"
+    "typescript": "^4.7.4"
   },
   "standard": {
     "ignore": [
