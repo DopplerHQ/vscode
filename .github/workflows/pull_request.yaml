@@ -1,0 +1,39 @@
+name: Pull Requests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - closed
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    name: "Create Release Environment"
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+    steps:
+      - run: |
+          NAME=$(gh cs create --repo $REPO --branch BRANCH --location WestUs2 --machine basicLinux32gb | tail -1) &&
+          gh pr comment $PR_NUMBER --repo $REPO --body "A release environment has been created for this pull request: https://$NAME.github.dev";
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.head_ref }}
+          PR_NUMBER: ${{ github.event.number }}
+
+  destroy:
+    runs-on: ubuntu-latest
+    name: "Destroy Release Environment"
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    permissions:
+      pull-requests: write
+    steps:
+      - run: |
+          NAME=$(gh cs list --repo $REPO --json name,gitStatus | jq -r '.[] | select (.gitStatus.ref == "develop") | .name') &&
+          gh cs delete --repo $REPO --codespace $NAME --force;
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.head_ref }}
