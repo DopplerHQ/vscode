@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.169.0/containers/python-3-miniconda
+{
+  "name": "Doppler Demo",
+
+  // Set Image
+  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node",
+
+  // Install the Doppler plugin
+  "postAttachCommand": "npm install && npm run install-package",
+
+  // Host requirements
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "500mb"
+  },
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
+}
