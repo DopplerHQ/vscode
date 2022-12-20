@@ -1,5 +1,7 @@
 .vscode/**
-test/**
+.devcontainer/**
+out/test/**
+src/**
 .gitignore
 **/jsconfig.json
 **/*.map
