@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Create Release Environment"
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
-    permissions:
-      pull-requests: write
+    permissions: write-all
     steps:
       - run: |
           NAME=$(gh cs create --repo $REPO --branch BRANCH --location WestUs2 --machine basicLinux32gb | tail -1) &&
@@ -27,8 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Destroy Release Environment"
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    permissions:
-      pull-requests: write
+    permissions: write-all
     steps:
       - run: |
           NAME=$(gh cs list --repo $REPO --json name,gitStatus | jq -r '.[] | select (.gitStatus.ref == "develop") | .name') &&
