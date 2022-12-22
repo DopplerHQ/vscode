@@ -89,9 +89,10 @@ async function hover(
         "**Doppler**",
         `Project: ${project}`,
         `Config: ${config}`,
-        `${key}: "${value}"`,
       ].join("</br>");
-      const markdown = new vscode.MarkdownString(text);
+      const markdown = new vscode.MarkdownString();
+      markdown.appendMarkdown(text);
+      markdown.appendCodeblock(value);
       markdown.supportHtml = true;
       return new vscode.Hover(markdown);
     }
