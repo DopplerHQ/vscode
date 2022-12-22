@@ -1,13 +1,7 @@
 export type DopplerIntervalSuccessCallback = () => void;
-export type DopplerIntervalCycleCallback = (
-  successCallback: DopplerIntervalSuccessCallback
-) => Promise<void>;
+export type DopplerIntervalCycleCallback = (successCallback: DopplerIntervalSuccessCallback) => Promise<void>;
 
-export async function interval(
-  time: number,
-  expireAfter: number,
-  callback: DopplerIntervalCycleCallback
-) {
+export async function interval(time: number, expireAfter: number, callback: DopplerIntervalCycleCallback) {
   let timeOut: NodeJS.Timeout;
 
   return new Promise(function (resolve, reject) {

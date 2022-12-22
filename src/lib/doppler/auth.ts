@@ -2,16 +2,12 @@ import * as helpers from "../helpers";
 
 export default class DopplerAuth {
   public async apiHost() {
-    const host = await helpers.terminal.run(
-      "doppler configure get api-host --plain"
-    );
+    const host = await helpers.terminal.run("doppler configure get api-host --plain");
     return host || "https://api.doppler.com";
   }
 
   public async dashboardHost() {
-    const host = await helpers.terminal.run(
-      "doppler configure get dashboard-host --plain"
-    );
+    const host = await helpers.terminal.run("doppler configure get dashboard-host --plain");
     return host || "https://dashboard.doppler.com";
   }
 
@@ -36,9 +32,7 @@ export default class DopplerAuth {
   }
 
   public async isScopeConfigured() {
-    return [await this.project(), await this.config()].every(
-      (element) => element.length > 0
-    );
+    return [await this.project(), await this.config()].every((element) => element.length > 0);
   }
 
   public async hasDopplerCLI() {
@@ -47,9 +41,7 @@ export default class DopplerAuth {
 
   public async enforceDopplerCLI() {
     if (!(await this.hasDopplerCLI())) {
-      throw new Error(
-        "Install the Doppler CLI with the 'Doppler: Install' command"
-      );
+      throw new Error("Install the Doppler CLI with the 'Doppler: Install' command");
     }
   }
 

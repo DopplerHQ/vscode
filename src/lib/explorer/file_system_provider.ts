@@ -4,13 +4,10 @@ import * as helpers from "../helpers";
 import * as doppler from "../doppler";
 import { TextEncoder, TextDecoder } from "util";
 
-export default class DopplerFileSystemProvider
-  implements vscode.FileSystemProvider
-{
+export default class DopplerFileSystemProvider implements vscode.FileSystemProvider {
   // Required part of the FileSystemProvider interface
   private _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
-  readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> =
-    this._emitter.event;
+  readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> = this._emitter.event;
 
   async fetchSecrets(project: string, config: string) {
     const secrets = await doppler.secrets.fetchRaw(project, config);
@@ -74,16 +71,10 @@ export default class DopplerFileSystemProvider
     return new TextEncoder().encode(content);
   }
 
-  async writeFile(
-    uri: vscode.Uri,
-    content: Uint8Array,
-    options: { create: boolean; overwrite: boolean }
-  ) {
+  async writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean }) {
     const { project, config } = helpers.parser.fromURI(uri);
     const existing_secrets = await this.fetchSecrets(project, config);
-    const new_secrets = yaml.parse(
-      new TextDecoder().decode(content)
-    ) as doppler.DopplerSecrets;
+    const new_secrets = yaml.parse(new TextDecoder().decode(content)) as doppler.DopplerSecrets;
     const changed_secrets: doppler.DopplerSecretsUpdate = {};
 
     // Detect changes
@@ -112,31 +103,19 @@ export default class DopplerFileSystemProvider
     return new vscode.Disposable(() => {});
   }
 
-  async rename(
-    oldUri: vscode.Uri,
-    newUri: vscode.Uri,
-    options: { overwrite: boolean }
-  ) {
-    throw new Error(
-      "DopplerFileSystemProvider: Rename operations are not allowed"
-    );
+  async rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }) {
+    throw new Error("DopplerFileSystemProvider: Rename operations are not allowed");
   }
 
   async delete(uri: vscode.Uri) {
-    throw new Error(
-      "DopplerFileSystemProvider: Delete operations are not allowed"
-    );
+    throw new Error("DopplerFileSystemProvider: Delete operations are not allowed");
   }
 
   async createDirectory(uri: vscode.Uri) {
-    throw new Error(
-      "DopplerFileSystemProvider: Create directory operations are not allowed"
-    );
+    throw new Error("DopplerFileSystemProvider: Create directory operations are not allowed");
   }
 
   async readDirectory(uri: vscode.Uri): Promise<[string, vscode.FileType][]> {
-    throw new Error(
-      "DopplerFileSystemProvider: Read directory operations are not allowed"
-    );
+    throw new Error("DopplerFileSystemProvider: Read directory operations are not allowed");
   }
 }

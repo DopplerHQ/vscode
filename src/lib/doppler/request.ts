@@ -72,9 +72,7 @@ export default class DopplerRequest {
   public async get(path: string, options: any = {}) {
     try {
       const request = await this.generate();
-      const response = await this.wrapPromiseWithLoader(
-        request.get(path, options)
-      );
+      const response = await this.wrapPromiseWithLoader(request.get(path, options));
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data.messages.join(" ") || error.message);
@@ -109,9 +107,7 @@ export default class DopplerRequest {
   public async post(path: string, options: any = {}) {
     try {
       const request = await this.generate();
-      const response = await this.wrapPromiseWithLoader(
-        request.post(path, options)
-      );
+      const response = await this.wrapPromiseWithLoader(request.post(path, options));
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data.messages.join(" ") || error.message);

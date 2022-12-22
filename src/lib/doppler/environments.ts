@@ -16,13 +16,9 @@ export class DopplerEnvironmentsProvider {
   }
 
   public async fetch(project: string) {
-    const response = await this.request.getAllPages(
-      "environments",
-      `/v3/environments`,
-      {
-        params: { project },
-      }
-    );
+    const response = await this.request.getAllPages("environments", `/v3/environments`, {
+      params: { project },
+    });
 
     return response.environments as DopplerEnvironment[];
   }

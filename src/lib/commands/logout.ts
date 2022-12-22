@@ -8,9 +8,7 @@ export default async function () {
     return;
   }
 
-  await helpers.terminal.run(
-    `doppler logout --yes --scope=${helpers.terminal.workingDirectory()}`
-  );
+  await helpers.terminal.run(`doppler logout --yes --scope=${helpers.terminal.workingDirectory()}`);
   await vscode.commands.executeCommand("doppler.explorer.refresh");
   vscode.window.showInformationMessage(`Doppler logout was successful`);
 }

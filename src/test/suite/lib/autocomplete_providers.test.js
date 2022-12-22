@@ -10,37 +10,21 @@ const providers = require("../../../lib/autocomplete/providers");
 describe("autcomplete providers", function () {
   describe("#javascriptCompletion", function () {
     it("returns undefined at line 0 and wrong position", async function () {
-      const javascriptFile = path.join(
-        __dirname,
-        "..",
-        "examples",
-        "javascript.js"
-      );
+      const javascriptFile = path.join(__dirname, "..", "examples", "javascript.js");
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(1, 22);
 
-      const result = providers.javascript.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.javascript.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
 
     it("returns value at line 1 and correct position", async function () {
-      const javascriptFile = path.join(
-        __dirname,
-        "..",
-        "examples",
-        "javascript.js"
-      );
+      const javascriptFile = path.join(__dirname, "..", "examples", "javascript.js");
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(1, 24);
 
-      const result = providers.javascript.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.javascript.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, ".HELLO");
       assert.equal(result[0].label.label, "HELLO");
@@ -78,10 +62,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(3, 19);
 
-      const result = providers.python.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.python.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -91,10 +72,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(3, 21);
 
-      const result = providers.python.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.python.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, '("HELLO"');
       assert.equal(result[0].label.label, "HELLO");
@@ -106,10 +84,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(4, 13);
 
-      const result = providers.python.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.python.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -119,10 +94,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(4, 16);
 
-      const result = providers.python.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.python.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, '("HELLO"');
       assert.equal(result[0].label.label, "HELLO");
@@ -134,10 +106,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(5, 15);
 
-      const result = providers.pythonArray.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.pythonArray.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -147,10 +116,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(5, 17);
 
-      const result = providers.pythonArray.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.pythonArray.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, '["HELLO"');
       assert.equal(result[0].label.label, "HELLO");
@@ -208,10 +174,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(5, 16);
 
-      const result = providers.phpGetEnv.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.phpGetEnv.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -221,10 +184,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(5, 18);
 
-      const result = providers.phpGetEnv.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.phpGetEnv.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, '("HELLO"');
       assert.equal(result[0].label.label, "HELLO");
@@ -286,10 +246,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(1, 32);
 
-      const result = providers.csharp.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.csharp.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -299,10 +256,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(1, 35);
 
-      const result = providers.csharp.provideCompletionItems(
-        document,
-        position
-      );
+      const result = providers.csharp.provideCompletionItems(document, position);
 
       assert.equal(result[0].insertText, '("HELLO"');
       assert.equal(result[0].label.label, "HELLO");

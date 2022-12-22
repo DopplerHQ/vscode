@@ -11,20 +11,12 @@ class DopplerExplorer {
       treeDataProvider: treeDataProvider,
     });
 
-    context.subscriptions.push(
-      vscode.workspace.registerTextDocumentContentProvider(
-        "doppler",
-        treeDataProvider
-      )
-    );
+    context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider("doppler", treeDataProvider));
 
     context.subscriptions.push(
-      vscode.commands.registerCommand(
-        `doppler.explorer.editor.config.dashboard`,
-        () => {
-          this.open_config_dashboard();
-        }
-      )
+      vscode.commands.registerCommand(`doppler.explorer.editor.config.dashboard`, () => {
+        this.open_config_dashboard();
+      })
     );
 
     vscode.workspace.onDidOpenTextDocument(async (document) => {
@@ -42,11 +34,7 @@ class DopplerExplorer {
       const { id: workplace } = await doppler.workplace.fetch();
       const dashboardhost = await doppler.auth.dashboardHost();
 
-      vscode.env.openExternal(
-        vscode.Uri.parse(
-          `${dashboardhost}/workplace/${workplace}/projects/${project}/configs/${config}`
-        )
-      );
+      vscode.env.openExternal(vscode.Uri.parse(`${dashboardhost}/workplace/${workplace}/projects/${project}/configs/${config}`));
     }
   }
 }

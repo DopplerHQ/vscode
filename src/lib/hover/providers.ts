@@ -3,11 +3,7 @@ import * as yaml from "yaml";
 import * as doppler from "../doppler";
 import * as helpers from "../helpers";
 
-async function hover(
-  language: string,
-  document: vscode.TextDocument,
-  position: vscode.Position
-) {
+async function hover(language: string, document: vscode.TextDocument, position: vscode.Position) {
   const configuration = vscode.workspace.getConfiguration("doppler");
 
   if (!configuration.get("hover.enable")) {
@@ -29,8 +25,7 @@ async function hover(
   const project = await doppler.auth.project();
   const config = await doppler.auth.config();
   const regexDict: { [key: string]: RegExp } = {
-    javascript:
-      /(?:process\.env\.([A-Z][A-Z_0-9]+))|(?:process\.env\[["'`]([A-Z][A-Z_0-9]+)["'`]\])/g,
+    javascript: /(?:process\.env\.([A-Z][A-Z_0-9]+))|(?:process\.env\[["'`]([A-Z][A-Z_0-9]+)["'`]\])/g,
     ruby: /ENV\[['"]([A-Z][A-Z_0-9]+)['"]\]/g,
     python:
       /os\.(?:(?:environ(?:(?:\.get\(["']([A-Z][A-Z_0-9]+)["']\))|(?:\[["']([A-Z][A-Z_0-9]+)["']\])))|(?:getenv\(["']([A-Z][A-Z_0-9]+)["']\)))/g,
@@ -65,10 +60,7 @@ async function hover(
     if (language === "doppler_yaml") {
       // Referencing secret in another config
       if (key.includes(".")) {
-        const { project, config, secret } = helpers.parser.fromReference(
-          key,
-          document.uri
-        );
+        const { project, config, secret } = helpers.parser.fromReference(key, document.uri);
         value = await doppler.secrets.fetchSecret(project, config, secret);
 
         // Referencing secret in current document
@@ -80,16 +72,8 @@ async function hover(
       value = await doppler.secrets.fetchSecret(project, config, key);
     }
 
-    if (
-      position.character >= start &&
-      position.character <= end &&
-      value !== undefined
-    ) {
-      const text = [
-        "**Doppler**",
-        `Project: ${project}`,
-        `Config: ${config}`,
-      ].join("</br>");
+    if (position.character >= start && position.character <= end && value !== undefined) {
+      const text = ["**Doppler**", `Project: ${project}`, `Config: ${config}`].join("</br>");
       const markdown = new vscode.MarkdownString();
       markdown.appendMarkdown(text);
       markdown.appendCodeblock(value);

@@ -17,27 +17,19 @@ interface Entry {
   config: string | null;
 }
 
-export default class DopplerEditorProvider
-  implements vscode.TreeDataProvider<Entry>, vscode.TextDocumentContentProvider
-{
+export default class DopplerEditorProvider implements vscode.TreeDataProvider<Entry>, vscode.TextDocumentContentProvider {
   private basePath: string;
   private fileSystemProvider: DopplerFileSystemProvider;
 
-  private _onDidChangeTreeData: vscode.EventEmitter<any> =
-    new vscode.EventEmitter<any>();
-  readonly onDidChangeTreeData: vscode.Event<any> =
-    this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+  readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
   constructor(context: vscode.ExtensionContext) {
     this.basePath = "doppler://";
     this.fileSystemProvider = new DopplerFileSystemProvider();
 
     context.subscriptions.push(
-      vscode.workspace.registerFileSystemProvider(
-        "doppler",
-        this.fileSystemProvider,
-        { isCaseSensitive: true }
-      )
+      vscode.workspace.registerFileSystemProvider("doppler", this.fileSystemProvider, { isCaseSensitive: true })
     );
 
     vscode.commands.registerCommand("doppler.explorer.refresh", () => {
@@ -47,10 +39,7 @@ export default class DopplerEditorProvider
 
   // Required part of the TextDocumentContentProvider interface
   readonly onDidChange?: vscode.Event<vscode.Uri> | undefined;
-  provideTextDocumentContent(
-    uri: vscode.Uri,
-    token: vscode.CancellationToken
-  ): vscode.ProviderResult<string> {
+  provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string> {
     throw new Error("Method not implemented.");
   }
 
@@ -64,9 +53,7 @@ export default class DopplerEditorProvider
     return {
       iconPath: new vscode.ThemeIcon(icons[element.type]),
       resourceUri: element.uri,
-      collapsibleState: element.isDirectory
-        ? vscode.TreeItemCollapsibleState.Collapsed
-        : undefined,
+      collapsibleState: element.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : undefined,
       command: element.isDirectory
         ? undefined
         : {

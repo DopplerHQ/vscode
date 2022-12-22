@@ -1,10 +1,7 @@
 import * as vscode from "vscode";
 import * as doppler from "../doppler";
 
-async function autocomplete(
-  triggerCharacter: string,
-  position: vscode.Position
-) {
+async function autocomplete(triggerCharacter: string, position: vscode.Position) {
   const configuration = vscode.workspace.getConfiguration("doppler");
 
   if (!configuration.get("autocomplete.enable")) {
@@ -36,16 +33,10 @@ async function autocomplete(
       detail: ` Doppler: ${project}.${config}.${key}`,
     };
 
-    const item = new vscode.CompletionItem(
-      completionItemLabel,
-      vscode.CompletionItemKind.Variable
-    );
+    const item = new vscode.CompletionItem(completionItemLabel, vscode.CompletionItemKind.Variable);
     item.insertText = `${triggerCharacter}${quote}${key}${quote}`;
     item.filterText = `${triggerCharacter}${quote}${key}${quote}`;
-    item.range = new vscode.Range(
-      new vscode.Position(position.line, position.character - 1),
-      position
-    ); // Picks up trigger character as prefix to fix the scoring it does when sorting
+    item.range = new vscode.Range(new vscode.Position(position.line, position.character - 1), position); // Picks up trigger character as prefix to fix the scoring it does when sorting
     item.sortText = `0-${project}.${config}.${key}`; // Make this the sortText so that any secret will go to the top of the list above anything else. After that VS Code will sort alphabetically by the label name.
     lines.push(item);
   }
@@ -53,17 +44,14 @@ async function autocomplete(
   return lines;
 }
 
-export interface DopplerCompletionItemProvider
-  extends vscode.CompletionItemProvider {
+export interface DopplerCompletionItemProvider extends vscode.CompletionItemProvider {
   triggerCharacters: string[];
 }
 
 export const javascript: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", "`", '"', "[", "."],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.endsWith("process.env.")) {
       return autocomplete(".", position);
@@ -80,9 +68,7 @@ export const javascript: DopplerCompletionItemProvider = {
 export const ruby: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "["],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?ENV\[(["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -95,14 +81,9 @@ export const ruby: DopplerCompletionItemProvider = {
 export const python: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
-    if (
-      linePrefix.match(/.*?os\.environ.get\((["'])?/) ||
-      linePrefix.match(/.*?os\.getenv\((["'])?/)
-    ) {
+    if (linePrefix.match(/.*?os\.environ.get\((["'])?/) || linePrefix.match(/.*?os\.getenv\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
     }
 
@@ -113,9 +94,7 @@ export const python: DopplerCompletionItemProvider = {
 export const pythonArray: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?os\.environ\[(["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -128,14 +107,9 @@ export const pythonArray: DopplerCompletionItemProvider = {
 export const php: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "["],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
-    if (
-      linePrefix.match(/.*?\$_SERVER\[(["'])?/) ||
-      linePrefix.match(/.*?\$_ENV\[(["'])?/)
-    ) {
+    if (linePrefix.match(/.*?\$_SERVER\[(["'])?/) || linePrefix.match(/.*?\$_ENV\[(["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
     }
 
@@ -146,9 +120,7 @@ export const php: DopplerCompletionItemProvider = {
 export const phpGetEnv: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?getenv\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -161,9 +133,7 @@ export const phpGetEnv: DopplerCompletionItemProvider = {
 export const go: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?os\.Getenv\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -176,9 +146,7 @@ export const go: DopplerCompletionItemProvider = {
 export const java: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?dotenv\.get\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -191,9 +159,7 @@ export const java: DopplerCompletionItemProvider = {
 export const csharp: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
     if (linePrefix.match(/.*?Environment\.GetEnvironmentVariable\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
@@ -206,14 +172,9 @@ export const csharp: DopplerCompletionItemProvider = {
 export const rust: DopplerCompletionItemProvider = {
   triggerCharacters: ["'", '"', "("],
   provideCompletionItems: function (document, position) {
-    const linePrefix = document
-      .lineAt(position)
-      .text.slice(0, position.character);
+    const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
-    if (
-      linePrefix.match(/.*?std::env::var\((["'])?/) ||
-      linePrefix.match(/.*?std::env::var_os\((["'])?/)
-    ) {
+    if (linePrefix.match(/.*?std::env::var\((["'])?/) || linePrefix.match(/.*?std::env::var_os\((["'])?/)) {
       return autocomplete(linePrefix.slice(-1), position);
     }
 

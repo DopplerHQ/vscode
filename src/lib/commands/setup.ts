@@ -124,9 +124,7 @@ export default async function () {
   // Setup Doppler CLI with scope
   const project = await select_project();
   const config = await select_config(project);
-  await helpers.terminal.run(
-    `doppler setup --project=${project} --config=${config}`
-  );
+  await helpers.terminal.run(`doppler setup --project=${project} --config=${config}`);
 
   // Configure Autocomplete
   const autocomplete = await select_autocomplete();
@@ -137,8 +135,6 @@ export default async function () {
   configuration.update("hover.enable", hover, target);
 
   // Show results
-  vscode.window.showInformationMessage(
-    `Doppler has been configured for ${project}.${config}`
-  );
+  vscode.window.showInformationMessage(`Doppler has been configured for ${project}.${config}`);
   await vscode.commands.executeCommand("doppler.explorer.refresh");
 }

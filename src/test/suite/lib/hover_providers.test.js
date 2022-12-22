@@ -10,12 +10,7 @@ const providers = require("../../../lib/hover/providers");
 describe("hover providers", function () {
   describe("#javascriptHover", function () {
     it("returns undefined at 0 line", async function () {
-      const javascriptFile = path.join(
-        __dirname,
-        "..",
-        "examples",
-        "javascript.js"
-      );
+      const javascriptFile = path.join(__dirname, "..", "examples", "javascript.js");
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(0, 22);
 
@@ -25,12 +20,7 @@ describe("hover providers", function () {
     });
 
     it("returns value at 0 line and correct position", async function () {
-      const javascriptFile = path.join(
-        __dirname,
-        "..",
-        "examples",
-        "javascript.js"
-      );
+      const javascriptFile = path.join(__dirname, "..", "examples", "javascript.js");
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(0, 26);
 

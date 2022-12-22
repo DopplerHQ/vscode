@@ -134,9 +134,11 @@
     ]
   },
   "scripts": {
+    "check": "concurrently -i -c green,blue, -n prettier,eslint 'npm run prettier' 'npm run lint'",
     "lint": "eslint \"src/**/*.ts\"",
-    "compile": "npm run lint && tsc -p .",
-    "watch": "npm run lint && tsc -watch -p .",
+    "prettier": "prettier . --check",
+    "compile": "npm run check && tsc -p .",
+    "watch": "npm run check && tsc -watch -p .",
     "test": "npm run compile && node ./out/test/runTest.js",
     "package": "npm run compile && vsce package --out=doppler.vsix",
     "install-package": "npm run package && code --install-extension=doppler.vsix && rm doppler.vsix",
@@ -157,7 +159,9 @@
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
     "standard": "^17.0.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "prettier": "^2.7.1",
+    "concurrently": "^6.3.0"
   },
   "standard": {
     "ignore": [

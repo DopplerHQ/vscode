@@ -42,10 +42,7 @@ export class DopplerSecretsProvider {
     return secrets;
   }
 
-  public async fetchRaw(
-    project: string,
-    config: string
-  ): Promise<DopplerSecrets> {
+  public async fetchRaw(project: string, config: string): Promise<DopplerSecrets> {
     const response = await this.request.get(`/v3/configs/config/secrets`, {
       params: { project, config },
     });
@@ -60,11 +57,7 @@ export class DopplerSecretsProvider {
     return secrets;
   }
 
-  public async fetchSecret(
-    project: string,
-    config: string,
-    name: string
-  ): Promise<DopplerSecrets> {
+  public async fetchSecret(project: string, config: string, name: string): Promise<DopplerSecrets> {
     const response = await this.request.get(`/v3/configs/config/secret`, {
       params: { project, config, name },
     });
@@ -73,21 +66,14 @@ export class DopplerSecretsProvider {
   }
 
   public async fetchNames(project: string, config: string): Promise<[string]> {
-    const response = await this.request.get(
-      `/v3/configs/config/secrets/names`,
-      {
-        params: { project, config, include_dynamic_secrets: true },
-      }
-    );
+    const response = await this.request.get(`/v3/configs/config/secrets/names`, {
+      params: { project, config, include_dynamic_secrets: true },
+    });
 
     return response.names;
   }
 
-  public async update(
-    project: string,
-    config: string,
-    secrets: DopplerSecretsUpdate
-  ) {
+  public async update(project: string, config: string, secrets: DopplerSecretsUpdate) {
     await this.request.post(`/v3/configs/config/secrets`, {
       project,
       config,

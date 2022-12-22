@@ -19,9 +19,7 @@ export default class DopplerTerminal {
       const activeEditorPath = vscode.window.activeTextEditor.document.uri.path;
       const matchedPath = vscode.workspace.workspaceFolders?.find((folder) => {
         const relative = path.relative(folder.uri.fsPath, activeEditorPath);
-        return (
-          relative && !relative.startsWith("..") && !path.isAbsolute(relative)
-        );
+        return relative && !relative.startsWith("..") && !path.isAbsolute(relative);
       });
 
       if (matchedPath !== undefined) {
