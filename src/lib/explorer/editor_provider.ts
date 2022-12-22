@@ -119,22 +119,18 @@ export default class DopplerEditorProvider
     } else {
       const project_name = element.project as string;
       const environment_id = element.environment as string;
-      const configs = await doppler.configs.fetch(project_name);
+      const configs = await doppler.configs.fetch(project_name, environment_id);
 
-      return configs
-        .filter((config) => {
-          return config.name.includes(environment_id);
-        })
-        .map((config) => {
-          return {
-            uri: vscode.Uri.parse(`${element.uri}/${config.name}`),
-            isDirectory: false,
-            type: EntryType.Config,
-            project: project_name,
-            environment: environment_id,
-            config: config.name,
-          };
-        });
+      return configs.map((config) => {
+        return {
+          uri: vscode.Uri.parse(`${element.uri}/${config.name}`),
+          isDirectory: false,
+          type: EntryType.Config,
+          project: project_name,
+          environment: environment_id,
+          config: config.name,
+        };
+      });
     }
   }
 }

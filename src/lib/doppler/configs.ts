@@ -18,9 +18,9 @@ export class DopplerConfigsProvider {
     this.request = request;
   }
 
-  public async fetch(project: string) {
+  public async fetch(project: string, environment?: string) {
     const response = await this.request.getAllPages("configs", `/v3/configs`, {
-      params: { project },
+      params: { project, environment },
     });
 
     return response.configs as DopplerConfig[];
