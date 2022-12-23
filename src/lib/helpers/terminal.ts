@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import { window, workspace } from "vscode";
 import * as util from "util";
 import * as path from "path";
 import { exec } from "child_process";
@@ -6,18 +6,18 @@ import { exec } from "child_process";
 const execAsync = util.promisify(exec);
 
 export default class DopplerTerminal {
-  private outputChannel = vscode.window.createOutputChannel(`Doppler`);
+  private outputChannel = window.createOutputChannel(`Doppler`);
 
   public workingDirectory(): string {
     // Use the root if there aren't any active workspace directories
-    if (vscode.workspace.workspaceFolders === undefined) {
+    if (workspace.workspaceFolders === undefined) {
       return "/";
     }
 
     // If an editor is active, select the corresponding workspace directory
-    if (vscode.window.activeTextEditor !== undefined) {
-      const activeEditorPath = vscode.window.activeTextEditor.document.uri.path;
-      const matchedPath = vscode.workspace.workspaceFolders?.find((folder) => {
+    if (window.activeTextEditor !== undefined) {
+      const activeEditorPath = window.activeTextEditor.document.uri.path;
+      const matchedPath = workspace.workspaceFolders?.find((folder) => {
         const relative = path.relative(folder.uri.fsPath, activeEditorPath);
         return relative && !relative.startsWith("..") && !path.isAbsolute(relative);
       });
@@ -28,7 +28,7 @@ export default class DopplerTerminal {
     }
 
     // Default to the first workspace directory
-    return vscode.workspace.workspaceFolders[0].uri.path;
+    return workspace.workspaceFolders[0].uri.path;
   }
 
   public async exists(command: string): Promise<boolean> {
@@ -52,10 +52,10 @@ export default class DopplerTerminal {
   }
 
   public async prompt(command: string) {
-    let terminal = vscode.window.activeTerminal;
+    let terminal = window.activeTerminal;
 
     if (terminal === undefined) {
-      terminal = vscode.window.createTerminal("Doppler");
+      terminal = window.createTerminal("Doppler");
       terminal.sendText(`cd ${this.workingDirectory()}; clear;`);
     }
 

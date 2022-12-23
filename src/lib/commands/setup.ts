@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import { window, workspace, commands, ConfigurationTarget } from "vscode";
 import * as helpers from "../helpers";
 import * as doppler from "../doppler";
 import install, { InstallFailedError } from "./install";
@@ -32,7 +32,7 @@ async function select_project() {
     };
   });
 
-  const response = await vscode.window.showQuickPick(items, {
+  const response = await window.showQuickPick(items, {
     title: "Select Project",
     ...QUICK_PICK_OPTIONS,
   });
@@ -50,7 +50,7 @@ async function select_config(project: string) {
       target: config.name,
     };
   });
-  const response = await vscode.window.showQuickPick(items, {
+  const response = await window.showQuickPick(items, {
     title: "Select Config",
     ...QUICK_PICK_OPTIONS,
   });
@@ -71,7 +71,7 @@ async function select_autocomplete() {
     },
   ];
 
-  const response = await vscode.window.showQuickPick(items, {
+  const response = await window.showQuickPick(items, {
     title: "Environment Variable: Autocomplete",
     ...QUICK_PICK_OPTIONS,
   });
@@ -91,7 +91,7 @@ async function select_hover() {
       target: false,
     },
   ];
-  const response = await vscode.window.showQuickPick(items, {
+  const response = await window.showQuickPick(items, {
     title: "Environment Variable: Hover",
     ...QUICK_PICK_OPTIONS,
   });
@@ -118,8 +118,8 @@ export default async function () {
     await login();
   }
 
-  const configuration = vscode.workspace.getConfiguration("doppler");
-  const target = vscode.ConfigurationTarget.Workspace;
+  const configuration = workspace.getConfiguration("doppler");
+  const target = ConfigurationTarget.Workspace;
 
   // Setup Doppler CLI with scope
   const project = await select_project();
@@ -135,6 +135,6 @@ export default async function () {
   configuration.update("hover.enable", hover, target);
 
   // Show results
-  vscode.window.showInformationMessage(`Doppler has been configured for ${project}.${config}`);
-  await vscode.commands.executeCommand("doppler.explorer.refresh");
+  window.showInformationMessage(`Doppler has been configured for ${project}.${config}`);
+  await commands.executeCommand("doppler.explorer.refresh");
 }

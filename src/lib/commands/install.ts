@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import { window, env, commands, Uri } from "vscode";
 import * as helpers from "../helpers";
 import * as doppler from "../doppler";
 
@@ -17,10 +17,10 @@ export default async function () {
   if (!(hasCurl || hasWget) || !hasGPG) {
     const message =
       "We failed to automatically install the Doppler CLI. Please install it manually by going to our documentation.";
-    const response = await vscode.window.showErrorMessage(message, { modal: true }, "Open Documentation");
+    const response = await window.showErrorMessage(message, { modal: true }, "Open Documentation");
 
     if (response === "Open Documentation") {
-      vscode.env.openExternal(vscode.Uri.parse("https://docs.doppler.com/docs/install-cli"));
+      env.openExternal(Uri.parse("https://docs.doppler.com/docs/install-cli"));
     }
 
     throw new InstallFailedError("Automated install of Doppler CLI failed. Please install manually.");
@@ -36,8 +36,8 @@ export default async function () {
   await helpers.interval(2000, 300000, async function (clearInterval) {
     if (await doppler.auth.hasDopplerCLI()) {
       clearInterval();
-      vscode.window.showInformationMessage(`The Doppler CLI has been installed`);
-      await vscode.commands.executeCommand("doppler.explorer.refresh");
+      window.showInformationMessage(`The Doppler CLI has been installed`);
+      await commands.executeCommand("doppler.explorer.refresh");
     }
   });
 }

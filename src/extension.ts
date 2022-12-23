@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
+import { ExtensionContext } from "vscode";
 import commands from "./lib/commands";
 import autocomplete from "./lib/autocomplete";
 import hover from "./lib/hover";
 import explorer from "./lib/explorer";
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
   // Activate Plugins
   commands(context);
   autocomplete(context);

@@ -1,7 +1,7 @@
-import * as vscode from "vscode";
+import { Uri } from "vscode";
 
 export default class DopplerParser {
-  public fromReference(reference: string, uri: vscode.Uri) {
+  public fromReference(reference: string, uri: Uri) {
     const uriIDs = this.fromURI(uri);
     const parts = reference.split(".");
 
@@ -21,7 +21,7 @@ export default class DopplerParser {
     }
   }
 
-  public fromURI(uri: vscode.Uri) {
+  public fromURI(uri: Uri) {
     const parts = uri.path.slice(1).split("/");
 
     return {

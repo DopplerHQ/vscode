@@ -1,8 +1,8 @@
-import * as vscode from "vscode";
+import { workspace, Position, CompletionItem, CompletionItemKind, CompletionItemProvider, Range } from "vscode";
 import * as doppler from "../doppler";
 
-async function autocomplete(triggerCharacter: string, position: vscode.Position) {
-  const configuration = vscode.workspace.getConfiguration("doppler");
+async function autocomplete(triggerCharacter: string, position: Position) {
+  const configuration = workspace.getConfiguration("doppler");
 
   if (!configuration.get("autocomplete.enable")) {
     return null;
@@ -33,10 +33,10 @@ async function autocomplete(triggerCharacter: string, position: vscode.Position)
       detail: ` Doppler: ${project}.${config}.${key}`,
     };
 
-    const item = new vscode.CompletionItem(completionItemLabel, vscode.CompletionItemKind.Variable);
+    const item = new CompletionItem(completionItemLabel, CompletionItemKind.Variable);
     item.insertText = `${triggerCharacter}${quote}${key}${quote}`;
     item.filterText = `${triggerCharacter}${quote}${key}${quote}`;
-    item.range = new vscode.Range(new vscode.Position(position.line, position.character - 1), position); // Picks up trigger character as prefix to fix the scoring it does when sorting
+    item.range = new Range(new Position(position.line, position.character - 1), position); // Picks up trigger character as prefix to fix the scoring it does when sorting
     item.sortText = `0-${project}.${config}.${key}`; // Make this the sortText so that any secret will go to the top of the list above anything else. After that VS Code will sort alphabetically by the label name.
     lines.push(item);
   }
@@ -44,7 +44,7 @@ async function autocomplete(triggerCharacter: string, position: vscode.Position)
   return lines;
 }
 
-export interface DopplerCompletionItemProvider extends vscode.CompletionItemProvider {
+export interface DopplerCompletionItemProvider extends CompletionItemProvider {
   triggerCharacters: string[];
 }
 

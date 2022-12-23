@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import { window, commands } from "vscode";
 import * as helpers from "../helpers";
 import * as doppler from "../doppler";
 
@@ -10,8 +10,8 @@ export default async function () {
     if (await doppler.auth.isAuthenticated()) {
       clearInterval();
 
-      vscode.window.showInformationMessage(`Doppler login was successful`);
-      await vscode.commands.executeCommand("doppler.explorer.refresh");
+      window.showInformationMessage(`Doppler login was successful`);
+      await commands.executeCommand("doppler.explorer.refresh");
     }
   });
 }

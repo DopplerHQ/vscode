@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import { version, window, Progress, ProgressLocation } from "vscode";
 import axios, { AxiosResponse } from "axios";
 import * as https from "https";
 import DopplerAuth from "./auth";
@@ -29,23 +29,23 @@ export default class DopplerRequest {
         minVersion: "TLSv1.2",
       }),
       headers: {
-        "User-Agent": `vscode-plugin/${packageJSON.version} vscode/${vscode.version}`,
+        "User-Agent": `vscode-plugin/${packageJSON.version} vscode/${version}`,
         Authorization: `Bearer ${token}`,
       },
     });
   }
 
   private async wrapPromiseWithLoader(promise: Promise<AxiosResponse>) {
-    let progressReporter: vscode.Progress<{
+    let progressReporter: Progress<{
       message?: string;
       increment?: number;
     }> | null;
 
     // Show progress bar for long running requests
     const timeout = setTimeout(function () {
-      vscode.window.withProgress(
+      window.withProgress(
         {
-          location: vscode.ProgressLocation.Notification,
+          location: ProgressLocation.Notification,
           title: "Doppler is loading ...",
           cancellable: false,
         },

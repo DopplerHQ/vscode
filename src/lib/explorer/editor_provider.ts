@@ -1,4 +1,17 @@
-import * as vscode from "vscode";
+import {
+  workspace,
+  commands,
+  Uri,
+  TreeDataProvider,
+  TextDocumentContentProvider,
+  EventEmitter,
+  Event,
+  ExtensionContext,
+  CancellationToken,
+  ProviderResult,
+  TreeItemCollapsibleState,
+  ThemeIcon,
+} from "vscode";
 import * as doppler from "../doppler";
 import DopplerFileSystemProvider from "./file_system_provider";
 
@@ -9,7 +22,7 @@ enum EntryType {
 }
 
 interface Entry {
-  uri: vscode.Uri;
+  uri: Uri;
   type: EntryType;
   isDirectory: boolean;
   project: string | null;
@@ -17,29 +30,29 @@ interface Entry {
   config: string | null;
 }
 
-export default class DopplerEditorProvider implements vscode.TreeDataProvider<Entry>, vscode.TextDocumentContentProvider {
+export default class DopplerEditorProvider implements TreeDataProvider<Entry>, TextDocumentContentProvider {
   private basePath: string;
   private fileSystemProvider: DopplerFileSystemProvider;
 
-  private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
-  readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>();
+  readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event;
 
-  constructor(context: vscode.ExtensionContext) {
+  constructor(context: ExtensionContext) {
     this.basePath = "doppler://";
     this.fileSystemProvider = new DopplerFileSystemProvider();
 
     context.subscriptions.push(
-      vscode.workspace.registerFileSystemProvider("doppler", this.fileSystemProvider, { isCaseSensitive: true })
+      workspace.registerFileSystemProvider("doppler", this.fileSystemProvider, { isCaseSensitive: true })
     );
 
-    vscode.commands.registerCommand("doppler.explorer.refresh", () => {
+    commands.registerCommand("doppler.explorer.refresh", () => {
       this._onDidChangeTreeData.fire(undefined);
     });
   }
 
   // Required part of the TextDocumentContentProvider interface
-  readonly onDidChange?: vscode.Event<vscode.Uri> | undefined;
-  provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string> {
+  readonly onDidChange?: Event<Uri> | undefined;
+  provideTextDocumentContent(uri: Uri, token: CancellationToken): ProviderResult<string> {
     throw new Error("Method not implemented.");
   }
 
@@ -51,9 +64,9 @@ export default class DopplerEditorProvider implements vscode.TreeDataProvider<En
     };
 
     return {
-      iconPath: new vscode.ThemeIcon(icons[element.type]),
+      iconPath: new ThemeIcon(icons[element.type]),
       resourceUri: element.uri,
-      collapsibleState: element.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : undefined,
+      collapsibleState: element.isDirectory ? TreeItemCollapsibleState.Collapsed : undefined,
       command: element.isDirectory
         ? undefined
         : {
@@ -78,7 +91,7 @@ export default class DopplerEditorProvider implements vscode.TreeDataProvider<En
       const projects = await doppler.projects.fetch();
       return projects.map((project) => {
         return {
-          uri: vscode.Uri.parse(`${this.basePath}/${project.name}`),
+          uri: Uri.parse(`${this.basePath}/${project.name}`),
           isDirectory: true,
           type: EntryType.Project,
           project: project.name,
@@ -93,7 +106,7 @@ export default class DopplerEditorProvider implements vscode.TreeDataProvider<En
       const environments = await doppler.environments.fetch(project_name);
       return environments.map((environment) => {
         return {
-          uri: vscode.Uri.parse(`${element.uri}/${environment.id}`),
+          uri: Uri.parse(`${element.uri}/${environment.id}`),
           isDirectory: true,
           type: EntryType.Environment,
           project: project_name,
@@ -110,7 +123,7 @@ export default class DopplerEditorProvider implements vscode.TreeDataProvider<En
 
       return configs.map((config) => {
         return {
-          uri: vscode.Uri.parse(`${element.uri}/${config.name}`),
+          uri: Uri.parse(`${element.uri}/${config.name}`),
           isDirectory: false,
           type: EntryType.Config,
           project: project_name,

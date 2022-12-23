@@ -1,10 +1,10 @@
-import * as vscode from "vscode";
+import { workspace, TextDocument, Position, Hover, HoverProvider, MarkdownString } from "vscode";
 import * as yaml from "yaml";
 import * as doppler from "../doppler";
 import * as helpers from "../helpers";
 
-async function hover(language: string, document: vscode.TextDocument, position: vscode.Position) {
-  const configuration = vscode.workspace.getConfiguration("doppler");
+async function hover(language: string, document: TextDocument, position: Position) {
+  const configuration = workspace.getConfiguration("doppler");
 
   if (!configuration.get("hover.enable")) {
     return null;
@@ -74,16 +74,16 @@ async function hover(language: string, document: vscode.TextDocument, position: 
 
     if (position.character >= start && position.character <= end && value !== undefined) {
       const text = ["**Doppler**", `Project: ${project}`, `Config: ${config}`].join("</br>");
-      const markdown = new vscode.MarkdownString();
+      const markdown = new MarkdownString();
       markdown.appendMarkdown(text);
       markdown.appendCodeblock(value);
       markdown.supportHtml = true;
-      return new vscode.Hover(markdown);
+      return new Hover(markdown);
     }
   }
 }
 
-export const providers: { [key: string]: vscode.HoverProvider } = {
+export const providers: { [key: string]: HoverProvider } = {
   javascript: {
     provideHover: function (document, position) {
       return hover("javascript", document, position);

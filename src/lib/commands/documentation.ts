@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
+import { env, Uri } from "vscode";
 
 export default async function () {
-  vscode.env.openExternal(vscode.Uri.parse("https://docs.doppler.com"));
+  env.openExternal(Uri.parse("https://docs.doppler.com"));
 }

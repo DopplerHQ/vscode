@@ -1,13 +1,13 @@
-import * as vscode from "vscode";
+import { EventEmitter, FileSystemProvider, FileChangeEvent, Event, FileType, Uri, Disposable } from "vscode";
 import * as yaml from "yaml";
 import * as helpers from "../helpers";
 import * as doppler from "../doppler";
 import { TextEncoder, TextDecoder } from "util";
 
-export default class DopplerFileSystemProvider implements vscode.FileSystemProvider {
+export default class DopplerFileSystemProvider implements FileSystemProvider {
   // Required part of the FileSystemProvider interface
-  private _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
-  readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> = this._emitter.event;
+  private _emitter = new EventEmitter<FileChangeEvent[]>();
+  readonly onDidChangeFile: Event<FileChangeEvent[]> = this._emitter.event;
 
   async fetchSecrets(project: string, config: string) {
     const secrets = await doppler.secrets.fetchRaw(project, config);
@@ -54,24 +54,24 @@ export default class DopplerFileSystemProvider implements vscode.FileSystemProvi
     return `${comment}\n\n${yamlFile}`;
   }
 
-  async stat(uri: vscode.Uri) {
+  async stat(uri: Uri) {
     const content = await this.readFile(uri);
 
     return {
-      type: vscode.FileType.File,
+      type: FileType.File,
       size: content.length,
       ctime: Date.now(),
       mtime: Date.now(),
     };
   }
 
-  async readFile(uri: vscode.Uri) {
+  async readFile(uri: Uri) {
     const { project, config } = helpers.parser.fromURI(uri);
     const content = this.jsonToYAML(await this.fetchSecrets(project, config));
     return new TextEncoder().encode(content);
   }
 
-  async writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean }) {
+  async writeFile(uri: Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean }) {
     const { project, config } = helpers.parser.fromURI(uri);
     const existing_secrets = await this.fetchSecrets(project, config);
     const new_secrets = yaml.parse(new TextDecoder().decode(content)) as doppler.DopplerSecrets;
@@ -97,25 +97,25 @@ export default class DopplerFileSystemProvider implements vscode.FileSystemProvi
     }
   }
 
-  watch(uri: vscode.Uri): vscode.Disposable {
+  watch(uri: Uri): Disposable {
     // ignore, fires for all changes...
     /* eslint @typescript-eslint/no-empty-function: "off" */
-    return new vscode.Disposable(() => {});
+    return new Disposable(() => {});
   }
 
-  async rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }) {
+  async rename(oldUri: Uri, newUri: Uri, options: { overwrite: boolean }) {
     throw new Error("DopplerFileSystemProvider: Rename operations are not allowed");
   }
 
-  async delete(uri: vscode.Uri) {
+  async delete(uri: Uri) {
     throw new Error("DopplerFileSystemProvider: Delete operations are not allowed");
   }
 
-  async createDirectory(uri: vscode.Uri) {
+  async createDirectory(uri: Uri) {
     throw new Error("DopplerFileSystemProvider: Create directory operations are not allowed");
   }
 
-  async readDirectory(uri: vscode.Uri): Promise<[string, vscode.FileType][]> {
+  async readDirectory(uri: Uri): Promise<[string, FileType][]> {
     throw new Error("DopplerFileSystemProvider: Read directory operations are not allowed");
   }
 }
