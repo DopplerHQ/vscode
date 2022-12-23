@@ -9,7 +9,7 @@ export default async function () {
     return;
   }
 
-  await helpers.terminal.run("doppler update");
-  const version = await helpers.terminal.run("doppler -v");
+  await helpers.terminal.run("doppler", ["update"]);
+  const version = await helpers.terminal.run("doppler", ["-v"]);
   await window.showInformationMessage(`The Doppler CLI has been updated to version ${version}.`);
 }

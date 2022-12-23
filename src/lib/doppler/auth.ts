@@ -2,28 +2,28 @@ import * as helpers from "../helpers";
 
 export default class DopplerAuth {
   public async apiHost() {
-    const host = await helpers.terminal.run("doppler configure get api-host --plain");
+    const host = await helpers.terminal.run("doppler", ["configure", "get", "api-host", "--plain"]);
     return host || "https://api.doppler.com";
   }
 
   public async dashboardHost() {
-    const host = await helpers.terminal.run("doppler configure get dashboard-host --plain");
+    const host = await helpers.terminal.run("doppler", ["configure", "get", "dashboard-host", "--plain"]);
     return host || "https://dashboard.doppler.com";
   }
 
   public async token() {
     await this.enforceDopplerCLI();
-    return await helpers.terminal.run("doppler configure get token --plain");
+    return await helpers.terminal.run("doppler", ["configure", "get", "token", "--plain"]);
   }
 
   public async project() {
     await this.enforceDopplerCLI();
-    return await helpers.terminal.run("doppler configure get project --plain");
+    return await helpers.terminal.run("doppler", ["configure", "get", "project", "--plain"]);
   }
 
   public async config() {
     await this.enforceDopplerCLI();
-    return await helpers.terminal.run("doppler configure get config --plain");
+    return await helpers.terminal.run("doppler", ["configure", "get", "config", "--plain"]);
   }
 
   public async isAuthenticated() {

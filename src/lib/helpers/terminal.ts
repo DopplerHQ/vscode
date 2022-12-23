@@ -1,9 +1,27 @@
 import { window, workspace } from "vscode";
 import * as util from "util";
 import * as path from "path";
-import { exec } from "child_process";
+import { spawn } from "child_process";
+import commandExists from "command-exists";
 
-const execAsync = util.promisify(exec);
+const commandExistsAsync = util.promisify(commandExists);
+
+export class SpawnError extends Error {
+  public code: number | null;
+  public stdout: string;
+  public stderr: string;
+
+  constructor(message: string, code: number | null, stdout: string, stderr: string) {
+    super(message);
+    this.code = code;
+    this.stdout = stdout;
+    this.stderr = stderr;
+  }
+
+  toString() {
+    return [`SpawnError: ${this.message}`, `exit=${this.code}`, this.stderr].join("\n");
+  }
+}
 
 export default class DopplerTerminal {
   private outputChannel = window.createOutputChannel(`Doppler`);
@@ -32,23 +50,49 @@ export default class DopplerTerminal {
   }
 
   public async exists(command: string): Promise<boolean> {
-    const path = await this.run(`which ${command} || true`);
-    return path.length > 0;
+    return await commandExistsAsync(command);
   }
 
-  public async run(command: string, options: any = {}): Promise<string> {
-    options.cwd = this.workingDirectory();
+  public async run(command: string, args: string[], options: any = {}): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      let stdout = "";
+      let stderr = "";
 
-    const response = await execAsync(command, options);
-    const stdout = response.stdout.toString().trim();
-    const stderr = response.stderr.toString().trim();
+      const process = spawn(command, args, {
+        ...options,
 
-    if (stderr.length > 0) {
-      this.outputChannel.append(stderr);
-      this.outputChannel.show();
-    }
+        // If the shell option is enabled, any input containing shell metacharacters may be used to trigger arbitrary command execution.
+        // We explicitly disable this, in case any caller attempts to enable it.
+        shell: false,
 
-    return stdout;
+        // Set current working directory to vscode active workspace directory
+        cwd: this.workingDirectory(),
+      });
+
+      process.stdout.on("data", (data) => {
+        stdout += data;
+      });
+
+      process.stderr.on("data", (data) => {
+        stderr += data;
+      });
+
+      process.on("close", (code) => {
+        stdout = stdout.trim();
+        stderr = stderr.trim();
+
+        if (code === 0) {
+          if (stderr.length > 0) {
+            this.outputChannel.append(stderr);
+            this.outputChannel.show();
+          }
+
+          resolve(stdout);
+        } else {
+          reject(new SpawnError(`Command failed: ${command} ${JSON.stringify(args)}`, code, stdout, stderr));
+        }
+      });
+    });
   }
 
   public async prompt(command: string) {

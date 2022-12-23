@@ -124,7 +124,7 @@ export default async function () {
   // Setup Doppler CLI with scope
   const project = await select_project();
   const config = await select_config(project);
-  await helpers.terminal.run(`doppler setup --project=${project} --config=${config}`);
+  await helpers.terminal.run("doppler", ["setup", `--project=${project}`, `--config=${config}`]);
 
   // Configure Autocomplete
   const autocomplete = await select_autocomplete();

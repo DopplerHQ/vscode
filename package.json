@@ -147,6 +147,7 @@
   },
   "publisher": "dopplerhq",
   "devDependencies": {
+    "@types/command-exists": "^1.2.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
     "@types/node": "16.x",
@@ -155,13 +156,13 @@
     "@typescript-eslint/parser": "^5.42.0",
     "@vscode/test-electron": "^2.1.5",
     "@vscode/vsce": "^2.15.0",
+    "concurrently": "^6.3.0",
     "eslint": "^8.18.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "standard": "^17.0.0",
-    "typescript": "^4.7.4",
     "prettier": "^2.7.1",
-    "concurrently": "^6.3.0"
+    "standard": "^17.0.0",
+    "typescript": "^4.7.4"
   },
   "standard": {
     "ignore": [
@@ -189,6 +190,7 @@
   ],
   "dependencies": {
     "axios": "^1.2.1",
+    "command-exists": "^1.2.9",
     "yaml": "^2.1.3"
   }
 }

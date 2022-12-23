@@ -8,7 +8,7 @@ export default async function () {
     return;
   }
 
-  await helpers.terminal.run(`doppler logout --yes --scope=${helpers.terminal.workingDirectory()}`);
+  await helpers.terminal.run("doppler", ["logout", "--yes", `--scope=${helpers.terminal.workingDirectory()}`]);
   await commands.executeCommand("doppler.explorer.refresh");
   window.showInformationMessage(`Doppler logout was successful`);
 }
