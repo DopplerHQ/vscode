@@ -1,0 +1,3 @@
+pnpm-lock.yaml
+typings/joi\.d\.ts$
+.*\.git-blame-ignore-revs$

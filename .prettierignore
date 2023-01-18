@@ -33,3 +33,6 @@ src/test/suite/examples
 
 # Build files
 out/
+
+# VS Code Test
+.vscode-test

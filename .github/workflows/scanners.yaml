@@ -1,0 +1,77 @@
+name: Scanners
+
+on:
+  push:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+    name: Trufflehog
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: trufflehog-actions-scan
+        uses: DopplerUniversity/trufflehog-actions-scan@master
+        with:
+          scanArguments: "--regex --max_depth=50 --branch=${{ steps.extract_branch.outputs.branch }} --entropy=False --allow=/github/workspace/.trufflehog/allow --exclude_paths=/github/workspace/.trufflehog/exclude_patterns"
+
+  npm_linter:
+    runs-on: ubuntu-latest
+    name: NPM Linter
+    steps:
+      - uses: actions/checkout@v2
+      - name: NPM Build
+        run: npm install --frozen-lockfile
+      - run: set -eo pipefail; npm run lint 2>&1| tee ./linter-report.txt
+      - uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: NPM Linter Report
+          path: ./linter-report.txt
+
+  npm_prettier:
+    runs-on: ubuntu-latest
+    name: NPM Prettier
+    steps:
+      - uses: actions/checkout@v2
+      - name: NPM Build
+        run: npm install --frozen-lockfile
+      - run: set -eo pipefail; npm run prettier 2>&1| tee ./prettier-report.txt
+      - uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: NPM Prettier Report
+          path: ./prettier-report.txt
+
+  npm_typecheck:
+    runs-on: ubuntu-latest
+    name: NPM Typecheck
+    steps:
+      - uses: actions/checkout@v2
+      - name: NPM Build
+        run: npm install --frozen-lockfile
+      - run: set -eo pipefail; npm run typecheck 2>&1| tee ./typecheck-report.txt
+      - uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: NPM Typecheck Report
+          path: ./typecheck-report.txt
+
+  npm_audit:
+    runs-on: ubuntu-latest
+    name: NPM Audit
+    steps:
+      - uses: actions/checkout@v2
+      - run: set -eo pipefail; npm audit 2>&1| tee ./audit-report.txt
+      - uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: NPM Audit Report
+          path: ./audit-report.txt

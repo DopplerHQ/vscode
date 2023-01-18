@@ -135,6 +135,7 @@
   },
   "scripts": {
     "check": "concurrently -i -c green,blue, -n prettier,eslint 'npm run prettier' 'npm run lint'",
+    "typecheck": "tsc --version && tsc",
     "lint": "eslint \"src/**/*.ts\"",
     "prettier": "prettier . --check",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
