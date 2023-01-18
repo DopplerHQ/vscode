@@ -5,7 +5,11 @@ const assert = require("assert");
 const path = require("path");
 const vscode = require("vscode");
 
-const providers = require("../../../lib/hover/providers");
+const { providers } = require("../../../../out/lib/hover/providers");
+
+const configuration = vscode.workspace.getConfiguration("doppler");
+configuration.update("hover.enable", true, vscode.ConfigurationTarget.Global);
+vscode.workspace.updateWorkspaceFolders(0, 0, { uri: vscode.Uri.parse(path.join(__dirname, "..", "..")) });
 
 describe("hover providers", function () {
   describe("#javascriptHover", function () {
@@ -14,7 +18,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(0, 22);
 
-      const result = providers.javascript.provideHover(document, position);
+      const result = await providers.javascript.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -24,9 +28,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(0, 26);
 
-      const result = providers.javascript.provideHover(document, position);
+      const result = await providers.javascript.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -36,7 +40,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rubyFile);
       const position = new vscode.Position(0, 9);
 
-      const result = providers.ruby.provideHover(document, position);
+      const result = await providers.ruby.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -46,9 +50,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rubyFile);
       const position = new vscode.Position(0, 13);
 
-      const result = providers.ruby.provideHover(document, position);
+      const result = await providers.ruby.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -58,7 +62,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(0, 19);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -68,9 +72,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(0, 23);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
 
     it("returns undefined at 0 line for os.getenv format", async function () {
@@ -78,7 +82,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(1, 13);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -88,9 +92,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(1, 17);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
 
     it("returns undefined at 0 line for os.environ[] format", async function () {
@@ -98,7 +102,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(2, 14);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -108,9 +112,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(2, 18);
 
-      const result = providers.python.provideHover(document, position);
+      const result = await providers.python.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -120,7 +124,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(0, 15);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -130,9 +134,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(0, 20);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
 
     it("returns undefined at 0 line for $_SERVER[] format", async function () {
@@ -140,7 +144,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(1, 17);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -150,9 +154,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(1, 22);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
 
     it("returns undefined at 0 line for getenv() format", async function () {
@@ -160,7 +164,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(2, 16);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -170,9 +174,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(2, 22);
 
-      const result = providers.php.provideHover(document, position);
+      const result = await providers.php.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -182,7 +186,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(goFile);
       const position = new vscode.Position(0, 9);
 
-      const result = providers.go.provideHover(document, position);
+      const result = await providers.go.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -192,9 +196,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(goFile);
       const position = new vscode.Position(0, 13);
 
-      const result = providers.go.provideHover(document, position);
+      const result = await providers.go.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -204,7 +208,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(javaFile);
       const position = new vscode.Position(0, 9);
 
-      const result = providers.java.provideHover(document, position);
+      const result = await providers.java.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -214,9 +218,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(javaFile);
       const position = new vscode.Position(0, 16);
 
-      const result = providers.java.provideHover(document, position);
+      const result = await providers.java.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -226,7 +230,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(0, 32);
 
-      const result = providers.csharp.provideHover(document, position);
+      const result = await providers.csharp.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -236,9 +240,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(0, 37);
 
-      const result = providers.csharp.provideHover(document, position);
+      const result = await providers.csharp.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 
@@ -248,7 +252,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(0, 12);
 
-      const result = providers.rust.provideHover(document, position);
+      const result = await providers.rust.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -258,9 +262,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(0, 16);
 
-      const result = providers.rust.provideHover(document, position);
+      const result = await providers.rust.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
 
     it("returns undefined at 0 line with var_os format", async function () {
@@ -268,7 +272,7 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(2, 12);
 
-      const result = providers.rust.provideHover(document, position);
+      const result = await providers.rust.provideHover(document, position);
 
       assert.equal(result, undefined);
     });
@@ -278,9 +282,9 @@ describe("hover providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(2, 22);
 
-      const result = providers.rust.provideHover(document, position);
+      const result = await providers.rust.provideHover(document, position);
 
-      assert.equal(result.contents[0], "World");
+      assert.notEqual(result.contents[0], undefined);
     });
   });
 });

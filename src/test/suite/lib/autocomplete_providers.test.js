@@ -5,7 +5,11 @@ const assert = require("assert");
 const path = require("path");
 const vscode = require("vscode");
 
-const providers = require("../../../lib/autocomplete/providers");
+const providers = require("../../../../out/lib/autocomplete/providers");
+
+const configuration = vscode.workspace.getConfiguration("doppler");
+configuration.update("autocomplete.enable", true, vscode.ConfigurationTarget.Global);
+vscode.workspace.updateWorkspaceFolders(0, 0, { uri: vscode.Uri.parse(path.join(__dirname, "..", "..")) });
 
 describe("autcomplete providers", function () {
   describe("#javascriptCompletion", function () {
@@ -14,7 +18,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(1, 22);
 
-      const result = providers.javascript.provideCompletionItems(document, position);
+      const result = await providers.javascript.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -24,11 +28,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(javascriptFile);
       const position = new vscode.Position(1, 24);
 
-      const result = providers.javascript.provideCompletionItems(document, position);
+      const results = await providers.javascript.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, ".HELLO");
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, ".HELLO");
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -38,7 +43,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rubyFile);
       const position = new vscode.Position(1, 7);
 
-      const result = providers.ruby.provideCompletionItems(document, position);
+      const result = await providers.ruby.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -48,11 +53,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rubyFile);
       const position = new vscode.Position(1, 9);
 
-      const result = providers.ruby.provideCompletionItems(document, position);
+      const results = await providers.ruby.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '["HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '["HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -62,7 +68,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(3, 19);
 
-      const result = providers.python.provideCompletionItems(document, position);
+      const result = await providers.python.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -72,11 +78,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(3, 21);
 
-      const result = providers.python.provideCompletionItems(document, position);
+      const results = await providers.python.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
 
     it("returns undefined at line 0 and wrong position for os.getenv format", async function () {
@@ -84,7 +91,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(4, 13);
 
-      const result = providers.python.provideCompletionItems(document, position);
+      const result = await providers.python.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -94,11 +101,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(4, 16);
 
-      const result = providers.python.provideCompletionItems(document, position);
+      const results = await providers.python.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
 
     it("returns undefined at line 0 and wrong position for os.environ[] format", async function () {
@@ -106,7 +114,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(5, 15);
 
-      const result = providers.pythonArray.provideCompletionItems(document, position);
+      const result = await providers.pythonArray.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -116,11 +124,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(pythonFile);
       const position = new vscode.Position(5, 17);
 
-      const result = providers.pythonArray.provideCompletionItems(document, position);
+      const results = await providers.pythonArray.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '["HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '["HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -130,7 +139,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(3, 15);
 
-      const result = providers.php.provideCompletionItems(document, position);
+      const result = await providers.php.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -140,11 +149,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(3, 17);
 
-      const result = providers.php.provideCompletionItems(document, position);
+      const results = await providers.php.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '["HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '["HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
 
     it("returns undefined at line 0 and wrong position for $_SERVER[] format", async function () {
@@ -152,7 +162,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(4, 18);
 
-      const result = providers.php.provideCompletionItems(document, position);
+      const result = await providers.php.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -162,11 +172,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(4, 20);
 
-      const result = providers.php.provideCompletionItems(document, position);
+      const results = await providers.php.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '["HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '["HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
 
     it("returns undefined at line 0 and wrong position for getenv() format", async function () {
@@ -174,7 +185,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(5, 16);
 
-      const result = providers.phpGetEnv.provideCompletionItems(document, position);
+      const result = await providers.phpGetEnv.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -184,11 +195,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(phpFile);
       const position = new vscode.Position(5, 18);
 
-      const result = providers.phpGetEnv.provideCompletionItems(document, position);
+      const results = await providers.phpGetEnv.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -198,7 +210,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(goFile);
       const position = new vscode.Position(1, 8);
 
-      const result = providers.go.provideCompletionItems(document, position);
+      const result = await providers.go.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -208,11 +220,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(goFile);
       const position = new vscode.Position(1, 10);
 
-      const result = providers.go.provideCompletionItems(document, position);
+      const results = await providers.go.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -222,7 +235,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(javaFile);
       const position = new vscode.Position(1, 8);
 
-      const result = providers.java.provideCompletionItems(document, position);
+      const result = await providers.java.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -232,11 +245,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(javaFile);
       const position = new vscode.Position(1, 11);
 
-      const result = providers.java.provideCompletionItems(document, position);
+      const results = await providers.java.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -246,7 +260,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(1, 32);
 
-      const result = providers.csharp.provideCompletionItems(document, position);
+      const result = await providers.csharp.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -256,11 +270,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(csharpFile);
       const position = new vscode.Position(1, 35);
 
-      const result = providers.csharp.provideCompletionItems(document, position);
+      const results = await providers.csharp.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 
@@ -270,7 +285,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(1, 12);
 
-      const result = providers.rust.provideCompletionItems(document, position);
+      const result = await providers.rust.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -280,11 +295,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(1, 14);
 
-      const result = providers.rust.provideCompletionItems(document, position);
+      const results = await providers.rust.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
 
     it("returns undefined at line 0 and wrong position with var_os format", async function () {
@@ -292,7 +308,7 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(3, 15);
 
-      const result = providers.rust.provideCompletionItems(document, position);
+      const result = await providers.rust.provideCompletionItems(document, position);
 
       assert.equal(result, undefined);
     });
@@ -302,11 +318,12 @@ describe("autcomplete providers", function () {
       const document = await vscode.workspace.openTextDocument(rustFile);
       const position = new vscode.Position(3, 17);
 
-      const result = providers.rust.provideCompletionItems(document, position);
+      const results = await providers.rust.provideCompletionItems(document, position);
+      const result = results.find((result) => result.label.label === "HELLO");
 
-      assert.equal(result[0].insertText, '("HELLO"');
-      assert.equal(result[0].label.label, "HELLO");
-      assert.equal(result[0].label.detail, " World");
+      assert.equal(result.insertText, '("HELLO"');
+      assert.equal(result.label.label, "HELLO");
+      assert.equal(result.label.detail, " Doppler: vscode.test.HELLO");
     });
   });
 });

@@ -11,3 +11,4 @@ jsconfig.json
 .eslintrc.json
 node_modules/**
 **/*.map
+.vscode-test/**
