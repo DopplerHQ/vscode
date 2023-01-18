@@ -29,7 +29,7 @@ export class DopplerSecretsProvider {
 
   public async fetch(project: string, config: string): Promise<DopplerSecrets> {
     const response = await this.request.get(`/v3/configs/config/secrets`, {
-      params: { project, config },
+      params: { project, config, include_managed_secrets: false },
     });
 
     const secretsWithRaw = response.secrets as DopplerSecretsWithRaw;
@@ -44,7 +44,7 @@ export class DopplerSecretsProvider {
 
   public async fetchRaw(project: string, config: string): Promise<DopplerSecrets> {
     const response = await this.request.get(`/v3/configs/config/secrets`, {
-      params: { project, config },
+      params: { project, config, include_managed_secrets: false },
     });
 
     const secretsWithRaw = response.secrets as DopplerSecretsWithRaw;
