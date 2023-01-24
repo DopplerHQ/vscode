@@ -62,7 +62,7 @@ async function select_autocomplete() {
   const items: DopplerQuickPickBooleanItem[] = [
     {
       label: "Enable",
-      description: "Show my secrets when typing an environment variable",
+      description: "Show the names of my secrets when typing an environment variable",
       target: true,
     },
     {
@@ -83,7 +83,7 @@ async function select_hover() {
   const items: DopplerQuickPickBooleanItem[] = [
     {
       label: "Enable",
-      description: "Show my secret when hovering over an environment variable",
+      description: "Show the value of a secret when hovering over an environment variable",
       target: true,
     },
     {
