@@ -1,0 +1,200 @@
+{
+  "name": "@dopplerhq/vscode",
+  "private": true,
+  "displayName": "Doppler",
+  "description": "Edit your secrets where you edit your code, with 2 way sync.",
+  "author": "@dopplerhq",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/dopplerhq/vscode",
+  "icon": "media/icon.png",
+  "pricing": "Free",
+  "galleryBanner": {
+    "color": "#000000",
+    "theme": "dark"
+  },
+  "qna": false,
+  "bugs": {
+    "url": "https://github.com/dopplerhq/vscode/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dopplerhq/vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.65.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Doppler",
+      "properties": {
+        "doppler.autocomplete.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Autocomplete environment variables with secrets from Doppler."
+        },
+        "doppler.hover.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show secret from Doppler when hovering over an environment variable."
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "doppler-explorer",
+          "title": "Doppler",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "doppler-explorer": [
+        {
+          "id": "doppler-explorer",
+          "name": "Doppler",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "doppler-explorer",
+        "contents": "Welcome to Doppler 🎉\nYou will now be able to view, edit, and save your Doppler secrets without leaving VS Code. To get started, connect to Doppler by logging in.\n[Setup Doppler](command:doppler.setup)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "doppler.explorer.refresh",
+          "when": "view == doppler-explorer",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "doppler.explorer.editor.config.dashboard",
+          "args": "",
+          "group": "navigation",
+          "when": "resourceScheme == doppler"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "doppler.install",
+        "category": "Doppler",
+        "title": "Install CLI"
+      },
+      {
+        "command": "doppler.update",
+        "category": "Doppler",
+        "title": "Update CLI"
+      },
+      {
+        "command": "doppler.login",
+        "category": "Doppler",
+        "title": "Login"
+      },
+      {
+        "command": "doppler.logout",
+        "category": "Doppler",
+        "title": "Logout"
+      },
+      {
+        "command": "doppler.setup",
+        "category": "Doppler",
+        "title": "Setup"
+      },
+      {
+        "command": "doppler.documentation",
+        "category": "Doppler",
+        "title": "Documentation"
+      },
+      {
+        "command": "doppler.explorer.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "doppler.explorer.editor.config.dashboard",
+        "category": "Doppler",
+        "title": "Open Dashboard",
+        "icon": "$(link-external)"
+      }
+    ]
+  },
+  "scripts": {
+    "check": "concurrently -i -c green,blue, -n prettier,eslint 'npm run prettier' 'npm run lint'",
+    "typecheck": "tsc --version && tsc",
+    "lint": "eslint \"src/**/*.ts\"",
+    "prettier": "prettier . --check",
+    "compile-dev": "esbuild `find ./src -not \\( -path ./src/test -prune \\) \\( -name '*.ts' \\)` --format=cjs --platform=node --sourcemap --outdir=./out",
+    "compile-prod": "esbuild ./src/extension.ts --format=cjs --platform=node --minify --bundle --external:vscode --outfile=out/extension.js",
+    "watch": "concurrently -i -c green,blue, -n check,build 'npm run check' 'npm run compile-dev -- --watch'",
+    "test": "npm run compile-dev && cd ./src/test && doppler configure set token '$DOPPLER_TOKEN' --silent && doppler setup -p vscode -c test --scope=. --silent && node ./runTest.js",
+    "test-local": "DOPPLER_TOKEN=$(doppler configure get token --plain) npm run test",
+    "package": "npm run compile-prod && vsce package --out=doppler.vsix --no-dependencies",
+    "install-package": "npm run package && code --install-extension=doppler.vsix && rm doppler.vsix",
+    "login": "vsce login",
+    "publish": "vsce publish --packagePath=doppler.vsix"
+  },
+  "publisher": "dopplerhq",
+  "devDependencies": {
+    "@types/command-exists": "^1.2.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.65.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/test-electron": "^2.1.5",
+    "@vscode/vsce": "^2.15.0",
+    "concurrently": "^6.3.0",
+    "esbuild": "^0.16.10",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "prettier": "^2.7.1",
+    "standard": "^17.0.0",
+    "typescript": "^4.7.4"
+  },
+  "standard": {
+    "ignore": [
+      "/out/test/suite/examples/**"
+    ]
+  },
+  "keywords": [
+    "doppler",
+    "secretops",
+    "dotenv",
+    "dotenv-vault",
+    "environment variables",
+    "vault",
+    "env",
+    ".env",
+    "environment",
+    "variables",
+    "config",
+    "settings",
+    "official",
+    "development",
+    "productivity",
+    "secrets",
+    "sync"
+  ],
+  "dependencies": {
+    "axios": "^1.2.1",
+    "command-exists": "^1.2.9",
+    "yaml": "^2.1.3"
+  }
+}

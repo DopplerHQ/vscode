@@ -1,3 +1,6 @@
 node_modules
 .vscode/settings.json
 .DS_Store
+out
+doppler.vsix
+.vscode-test

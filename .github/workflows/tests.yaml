@@ -1,0 +1,30 @@
+name: Tests
+
+# Disabling until we decide it's worth it to run the tests on
+# GitHub actions which will require a bigger machine than the
+# default one used. A bigger machine is needed as the tests
+# require the VS Code application to run.
+# on:
+#   push:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Tests
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install CLI
+        uses: dopplerhq/cli-action@v2
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: NPM Test
+        run: npm run test
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
