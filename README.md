@@ -64,6 +64,20 @@ When your cursor hovers over an environment variable (ex: `ENV["SECRET_KEY"]`) w
 - Ruby
 - CSharp
 
+## Testing Releases
+
+Installing a [release candidate](https://github.com/DopplerHQ/vscode/releases) is simple and fast.
+
+### 1. Download the extension
+
+In the release, click on `doppler.vsix` to download the extension.
+
+### 2. Install Extension
+
+In VS Code, open up the Marketplace tab. Then click on the 3 horizontal dots icon. Lastly select "Install from VSIX" from the dropdown.
+
+![VS Code Install Extension](./media/vscode-install-extension.png)
+
 ## Contributing
 
 If you want to contribute to this project, you can do so by forking the repository and submitting a pull request.
