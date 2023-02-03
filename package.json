@@ -3,7 +3,8 @@
   "private": true,
   "displayName": "Doppler",
   "description": "Edit your secrets where you edit your code, with 2 way sync.",
-  "author": "@dopplerhq",
+  "publisher": "doppler",
+  "author": "doppler",
   "version": "0.0.1",
   "license": "Apache-2.0",
   "homepage": "https://github.com/dopplerhq/vscode",
@@ -148,7 +149,6 @@
     "login": "vsce login",
     "publish": "vsce publish --packagePath=doppler.vsix"
   },
-  "publisher": "dopplerhq",
   "devDependencies": {
     "@types/command-exists": "^1.2.0",
     "@types/glob": "^7.2.0",
