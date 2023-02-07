@@ -7,15 +7,17 @@ import DopplerAuth from "./auth";
 const packageJSON = require("../../../package.json");
 
 const REQUEST_TIMEOUT = 30000; // 30 seconds
-const SHOW_LOADER_AFTER = 750; // 0.75 seconds
+const SHOW_LOADER_AFTER = 1000; // 1 seconds
 const MAX_ITEMS_PER_PAGE = 100;
 const MAX_PAGE_ITERATIONS = 100;
 
 export default class DopplerRequest {
   private auth: DopplerAuth;
+  private requestLoader: DopplerRequestLoader;
 
   constructor(auth: DopplerAuth) {
     this.auth = auth;
+    this.requestLoader = new DopplerRequestLoader();
   }
 
   private async generate() {
@@ -35,44 +37,10 @@ export default class DopplerRequest {
     });
   }
 
-  private async wrapPromiseWithLoader(promise: Promise<AxiosResponse>) {
-    let progressReporter: Progress<{
-      message?: string;
-      increment?: number;
-    }> | null;
-
-    // Show progress bar for long running requests
-    const timeout = setTimeout(function () {
-      window.withProgress(
-        {
-          location: ProgressLocation.Notification,
-          title: "Doppler is loading ...",
-          cancellable: false,
-        },
-        async (progress) => {
-          progressReporter = progress;
-        }
-      );
-    }, SHOW_LOADER_AFTER);
-
-    // Hide progress bar after request completes
-    return promise
-      .then(function (response) {
-        clearTimeout(timeout);
-        progressReporter?.report({ increment: 100 });
-        return response;
-      })
-      .catch(function (error) {
-        clearTimeout(timeout);
-        progressReporter?.report({ increment: 100 });
-        throw error;
-      });
-  }
-
   public async get(path: string, options: any = {}) {
     try {
       const request = await this.generate();
-      const response = await this.wrapPromiseWithLoader(request.get(path, options));
+      const response = await this.requestLoader.wrap(request.get(path, options));
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data.messages.join(" ") || error.message);
@@ -107,10 +75,73 @@ export default class DopplerRequest {
   public async post(path: string, options: any = {}) {
     try {
       const request = await this.generate();
-      const response = await this.wrapPromiseWithLoader(request.post(path, options));
+      const response = await this.requestLoader.wrap(request.post(path, options));
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data.messages.join(" ") || error.message);
     }
+  }
+}
+
+class DopplerRequestLoader {
+  private requests = new Map<Promise<AxiosResponse>, NodeJS.Timeout>();
+  private progressReporter: Progress<{
+    message?: string;
+    increment?: number;
+  }> | null = null;
+
+  public async wrap(promise: Promise<AxiosResponse>) {
+    this.addRequest(promise);
+
+    // Hide progress bar after request completes
+    return promise
+      .then((response) => {
+        this.removeRequest(promise);
+        return response;
+      })
+      .catch((error) => {
+        this.removeRequest(promise);
+        throw error;
+      });
+  }
+
+  private addRequest(promise: Promise<AxiosResponse>) {
+    const timeout = setTimeout(() => {
+      this.showProgressBar();
+    }, SHOW_LOADER_AFTER);
+
+    this.requests.set(promise, timeout);
+  }
+
+  private removeRequest(promise: Promise<AxiosResponse>) {
+    const timeout = this.requests.get(promise);
+    clearTimeout(timeout);
+    this.requests.delete(promise);
+
+    if (this.requests.size === 0) {
+      this.hideProgressBar();
+    }
+  }
+
+  private showProgressBar() {
+    if (this.progressReporter !== null) {
+      return;
+    }
+
+    window.withProgress(
+      {
+        location: ProgressLocation.Notification,
+        title: "Doppler is loading ...",
+        cancellable: false,
+      },
+      async (progress) => {
+        this.progressReporter = progress;
+      }
+    );
+  }
+
+  private hideProgressBar() {
+    this.progressReporter?.report({ increment: 100 });
+    this.progressReporter = null;
   }
 }
