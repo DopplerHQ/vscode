@@ -6,6 +6,7 @@ on:
 
 jobs:
   release:
+    environment: Production
     runs-on: ubuntu-latest
     permissions:
       contents: write
