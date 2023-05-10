@@ -23,22 +23,23 @@ jobs:
 
       - name: Check If Tag Exists
         id: tag
-        run: echo "exists=$([[ ! -z $(git tag -l "$TAG") ]] && echo true || echo false)" >> $GITHUB_OUTPUT;
+        run: echo "exists=$(gh release view "$TAG" &> /dev/null && echo "true" || echo "false")" >> $GITHUB_OUTPUT;
         env:
           TAG: ${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: NPM Install
-        if: steps.tag.outputs.exists == false
+        if: steps.tag.outputs.exists == 'false'
         run: npm ci
 
       - name: Build Extension
         id: build_extension
-        if: steps.tag.outputs.exists == false
+        if: steps.tag.outputs.exists == 'false'
         run: npm run package && echo "extension_path=$(ls *.vsix)" >> $GITHUB_OUTPUT;
 
       - name: Create release on GitHub
         id: create_release
-        if: steps.tag.outputs.exists == false
+        if: steps.tag.outputs.exists == 'false'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +50,7 @@ jobs:
           prerelease: false
 
       - name: Upload extension as release asset to GitHub
-        if: steps.tag.outputs.exists == false
+        if: steps.tag.outputs.exists == 'false'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -60,7 +61,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Publish to Marketplace
-        if: steps.tag.outputs.exists == false
+        if: steps.tag.outputs.exists == 'false'
         run: npm run publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
