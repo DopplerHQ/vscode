@@ -76,7 +76,7 @@ async function hover(language: string, document: TextDocument, position: Positio
       const text = ["**Doppler**", `Project: ${project}`, `Config: ${config}`].join("</br>");
       const markdown = new MarkdownString();
       markdown.appendMarkdown(text);
-      markdown.appendCodeblock(value);
+      markdown.appendCodeblock(value ?? "[RESTRICTED]");
       markdown.supportHtml = true;
       return new Hover(markdown);
     }
