@@ -2,7 +2,7 @@ import DopplerAuth from "./auth";
 import DopplerRequest from "./request";
 
 export interface DopplerSecrets {
-  [key: string]: string;
+  [key: string]: string | null;
 }
 
 export interface DopplerSecretsUpdate {
@@ -10,8 +10,8 @@ export interface DopplerSecretsUpdate {
 }
 
 interface DopplerSecretWithRaw {
-  raw: string;
-  computed: string;
+  raw: string | null;
+  computed: string | null;
 }
 
 interface DopplerSecretsWithRaw {
@@ -44,7 +44,7 @@ export class DopplerSecretsProvider {
 
   public async fetchRaw(project: string, config: string): Promise<DopplerSecrets> {
     const response = await this.request.get(`/v3/configs/config/secrets`, {
-      params: { project, config, include_managed_secrets: false },
+      params: { project, config, include_managed_secrets: false, raw_only: true },
     });
 
     const secretsWithRaw = response.secrets as DopplerSecretsWithRaw;
