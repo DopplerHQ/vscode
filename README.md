@@ -30,6 +30,19 @@ Now that the extension has been installed, start the setup process. This will in
 
 ![Setup Demo](media/setup-demo.gif)
 
+### Windows
+
+This extension works fine on Windows! Unfortunately, it does require [manually installing the CLI](https://docs.doppler.com/docs/install-cli#installation). All Doppler CLI commands are executed inside a spawned `cmd.exe` shell, so if you install the Doppler CLI via any method other than using `scoop`, then you'll need to manually update the `PATH` inside `cmd.exe` to get the extension working. Make sure you run `doppler login` after installing.
+
+If you followed our instructions for installing via Git Bash, then you can update the `PATH` as follows:
+
+1. Open `cmd.exe`.
+2. Run `SETX PATH "%PATH%;%HOMEDRIVE%%HOMEPATH%\bin"`.
+3. Restart `cmd.exe` and type `doppler` at the prompt. You should see the Doppler CLI help output.
+4. Restart VSCode. The extension should stop prompting you to setup and should display your Doppler projects.
+
+You can update the `SETX` command above to append whatever path you installed the Doppler CLI to if you didn't follow our Git Bash instructions verbatim.
+
 ## Edit Secrets
 
 In the Doppler sidebar, you will see a list of all your projects. When you click into a project, a list of its enviroments and configs are shown in the tree. Click on a config to edit its secrets.
