@@ -3,6 +3,7 @@ import * as util from "util";
 import * as path from "path";
 import { spawn } from "child_process";
 import commandExists from "command-exists";
+import { isWindows } from "./os";
 
 const commandExistsAsync = util.promisify(commandExists);
 
@@ -32,21 +33,30 @@ export default class DopplerTerminal {
       return "/";
     }
 
+    // Default to the first workspace directory
+    let fsPath = workspace.workspaceFolders[0].uri.fsPath;
+
     // If an editor is active, select the corresponding workspace directory
     if (window.activeTextEditor !== undefined) {
-      const activeEditorPath = window.activeTextEditor.document.uri.path;
+      const activeEditorPath = window.activeTextEditor.document.uri.fsPath;
       const matchedPath = workspace.workspaceFolders?.find((folder) => {
         const relative = path.relative(folder.uri.fsPath, activeEditorPath);
         return relative && !relative.startsWith("..") && !path.isAbsolute(relative);
       });
 
       if (matchedPath !== undefined) {
-        return matchedPath.uri.path;
+        fsPath = matchedPath.uri.fsPath;
       }
     }
 
-    // Default to the first workspace directory
-    return workspace.workspaceFolders[0].uri.path;
+    // If we're running on Windows, ensure the drive letter is capitalized. By
+    // default it comes back as lowercase even though it's uppercase in the
+    // command prompt. Since the Doppler CLI is case-sensitive, this break things.
+    if (isWindows() && path.isAbsolute(fsPath)) {
+      return fsPath.charAt(0).toUpperCase() + fsPath.slice(1);
+    }
+
+    return fsPath;
   }
 
   public async exists(command: string): Promise<boolean> {
