@@ -101,8 +101,6 @@ First, install all dependencies:
 npm install
 ```
 
-Make sure `./node_modules/.bin` is added to your `PATH` so that the `esbuild` binary that's installed as a devDependency can be used.
-
 Next, run this command:
 
 ```
