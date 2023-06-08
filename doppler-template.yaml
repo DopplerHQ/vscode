@@ -1,0 +1,11 @@
+projects:
+  - name: vscode
+    description: A project used for executing tests for the Doppler VS Code extension.
+    environments:
+      - slug: test
+        name: Test
+        configs:
+          - slug: test
+    secrets:
+      test:
+        HELLO: world

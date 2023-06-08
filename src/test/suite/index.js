@@ -7,6 +7,7 @@ function run() {
   const mocha = new Mocha({
     ui: "tdd",
     color: true,
+    timeout: 5000,
   });
 
   const testsRoot = path.resolve(__dirname, "..");

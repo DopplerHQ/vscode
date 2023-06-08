@@ -91,6 +91,42 @@ In VS Code, open up the Marketplace tab. Then click on the 3 horizontal dots ico
 
 ![VS Code Install Extension](./media/vscode-install-extension.png)
 
+## Local Development
+
+### Building the Extension
+
+First, install all dependencies:
+
+```
+npm install
+```
+
+Make sure `./node_modules/.bin` is added to your `PATH` so that the `esbuild` binary that's installed as a devDependency can be used.
+
+Next, run this command:
+
+```
+npm run install-package
+```
+
+This will build the extension and then install it in VS Code via the `code --install-extension` CLI command.
+
+### Running Tests
+
+**NOTE: Tests currently won't run in Windows environments due to spawn issues with vscode-test. Contributions welcome if you're able to get this working!**
+
+To run the tests, you'll need a Doppler project in your workplace named `vscode` that has a `test` config containing a single secret named `HELLO` (the value of that secret doesn't matter). You can create that by using the import button below:
+
+[![Import to Doppler](https://raw.githubusercontent.com/DopplerUniversity/app-config-templates/main/doppler-button.svg)](https://dashboard.doppler.com/workplace/template/import?template=https://github.com/dopplerhq/vscode/blob/master/doppler-template.yaml)
+
+Alternately, you can run `doppler import` from the root of the project directory.
+
+Once the `vscode` project exists, you can execute the tests by running the following command:
+
+```
+npm run test-local
+```
+
 ## Contributing
 
 If you want to contribute to this project, you can do so by forking the repository and submitting a pull request.

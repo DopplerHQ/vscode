@@ -145,7 +145,7 @@
     "test": "npm run compile-dev && cd ./src/test && doppler configure set token '$DOPPLER_TOKEN' --silent && doppler setup -p vscode -c test --scope=. --silent && node ./runTest.js",
     "test-local": "DOPPLER_TOKEN=$(doppler configure get token --plain) npm run test",
     "package": "npm run compile-prod && vsce package --out=doppler.vsix --no-dependencies",
-    "install-package": "npm run package && code --install-extension=doppler.vsix && rm doppler.vsix",
+    "install-package": "npm run package && code --install-extension=doppler.vsix",
     "login": "vsce login",
     "publish": "vsce publish --packagePath=doppler.vsix"
   },
