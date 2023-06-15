@@ -94,7 +94,6 @@ export default class DopplerTerminal {
         if (code === 0) {
           if (stderr.length > 0) {
             this.outputChannel.append(stderr);
-            this.outputChannel.show();
           }
 
           resolve(stdout);
