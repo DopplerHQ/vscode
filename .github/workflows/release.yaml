@@ -65,3 +65,9 @@ jobs:
         run: npm run publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Publish to OVSX Marketplace
+        if: steps.tag.outputs.exists == 'false'
+        run: npm run publish-ovsx
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}

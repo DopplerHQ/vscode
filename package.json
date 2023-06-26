@@ -147,7 +147,8 @@
     "package": "npm run compile-prod && vsce package --out=doppler.vsix --no-dependencies",
     "install-package": "npm run package && code --install-extension=doppler.vsix",
     "login": "vsce login",
-    "publish": "vsce publish --packagePath=doppler.vsix"
+    "publish": "vsce publish --packagePath=doppler.vsix",
+    "publish-ovsx": "ovsx publish doppler.vsix"
   },
   "devDependencies": {
     "@types/command-exists": "^1.2.0",
@@ -158,15 +159,19 @@
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "@vscode/test-electron": "^2.1.5",
-    "@vscode/vsce": "^2.15.0",
+    "@vscode/vsce": "^2.19.0",
     "concurrently": "^6.3.0",
     "esbuild": "^0.16.10",
     "eslint": "^8.18.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
+    "ovsx": "^0.8.1",
     "prettier": "^2.7.1",
-    "standard": "^17.0.0",
+    "standard": "^17.1.0",
     "typescript": "^4.7.4"
+  },
+  "overrides": {
+    "semver": "^7.5.2"
   },
   "standard": {
     "ignore": [
