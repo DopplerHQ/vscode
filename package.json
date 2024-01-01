@@ -76,11 +76,32 @@
     "menus": {
       "view/title": [
         {
+          "command": "doppler.explorer.addProject",
+          "when": "view == doppler-explorer"
+        },
+        {
           "command": "doppler.explorer.refresh",
           "when": "view == doppler-explorer",
           "group": "navigation"
         }
       ],
+			"view/item/context": [
+				{
+					"command": "doppler.addEnvironment",
+					"when": "view == doppler-explorer && viewItem == 0",
+					"group": "inline"
+				},
+				{
+					"command": "doppler.addConfig",
+					"when": "view == doppler-explorer && viewItem == 1",
+					"group": "inline"
+				},
+				{
+					"command": "doppler.selectConfig",
+					"when": "view == doppler-explorer && viewItem == 2",
+					"group": "inline"
+				}
+			],
       "editor/title": [
         {
           "command": "doppler.explorer.editor.config.dashboard",
@@ -91,6 +112,38 @@
       ]
     },
     "commands": [
+      {
+				"command": "doppler.explorer.addProject",
+        "category": "Doppler",
+				"title": "Add Project"
+			},
+      {
+				"command": "doppler.addEnvironment",
+        "category": "Doppler",
+				"title": "Add Environment",
+				"icon": {
+					"light": "media/add.svg",
+					"dark": "media/add-dark.svg"
+				}
+			},
+			{
+				"command": "doppler.addConfig",
+        "category": "Doppler",
+				"title": "Add Config",
+				"icon": {
+					"light": "media/add.svg",
+					"dark": "media/add-dark.svg"
+				}
+			},
+			{
+				"command": "doppler.selectConfig",
+        "category": "Doppler",
+				"title": "Select Config",
+				"icon": {
+					"light": "media/checkmark.svg",
+					"dark": "media/checkmark-dark.svg"
+				}
+			},
       {
         "command": "doppler.install",
         "category": "Doppler",
