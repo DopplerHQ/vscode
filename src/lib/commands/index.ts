@@ -5,6 +5,7 @@ import setup from "./setup";
 import documentation from "./documentation";
 import install from "./install";
 import update from "./update";
+import selectConfig from "./select-config";
 
 export default function (context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand("doppler.login", login));
@@ -18,4 +19,6 @@ export default function (context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand("doppler.install", install));
 
   context.subscriptions.push(commands.registerCommand("doppler.update", update));
+
+  context.subscriptions.push(commands.registerCommand('doppler.selectConfig', selectConfig));
 }

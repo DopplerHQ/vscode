@@ -4,3 +4,4 @@ node_modules
 out
 doppler.vsix
 .vscode-test
+.history

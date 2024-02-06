@@ -18,4 +18,13 @@ export class DopplerProjectsProvider {
     const response = await this.request.getAllPages("projects", `/v3/projects`);
     return response.projects as DopplerProject[];
   }
+
+  public async add(name: string, description?: string) {
+    const response = await this.request.post('/v3/projects', {
+      name: name.trim(),
+      description,
+    });
+
+    return response.project as DopplerProject;
+  }
 }
