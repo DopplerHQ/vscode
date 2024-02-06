@@ -115,7 +115,7 @@ This will build the extension and then install it in VS Code via the `code --ins
 
 To run the tests, you'll need a Doppler project in your workplace named `vscode` that has a `test` config containing a single secret named `HELLO` (the value of that secret doesn't matter). You can create that by using the import button below:
 
-[![Import to Doppler](https://raw.githubusercontent.com/DopplerUniversity/app-config-templates/main/doppler-button.svg)](https://dashboard.doppler.com/workplace/template/import?template=https://github.com/dopplerhq/vscode/blob/master/doppler-template.yaml)
+[<img alt="Import to Doppler" src="https://raw.githubusercontent.com/DopplerUniversity/app-config-templates/main/doppler-button.png" width="200"/>](https://dashboard.doppler.com/workplace/template/import?template=https://github.com/dopplerhq/vscode/blob/master/doppler-template.yaml)
 
 Alternately, you can run `doppler import` from the root of the project directory.
 
