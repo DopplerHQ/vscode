@@ -5,7 +5,7 @@
   "description": "Edit your secrets where you edit your code, with 2 way sync.",
   "publisher": "doppler",
   "author": "doppler",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "Apache-2.0",
   "homepage": "https://github.com/dopplerhq/vscode",
   "icon": "media/icon.png",
