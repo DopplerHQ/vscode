@@ -11,6 +11,7 @@ import {
   ProviderResult,
   TreeItemCollapsibleState,
   ThemeIcon,
+  window
 } from "vscode";
 import * as doppler from "../doppler";
 import DopplerFileSystemProvider from "./file_system_provider";
@@ -48,6 +49,60 @@ export default class DopplerEditorProvider implements TreeDataProvider<Entry>, T
     commands.registerCommand("doppler.explorer.refresh", () => {
       this._onDidChangeTreeData.fire(undefined);
     });
+
+    commands.registerCommand('doppler.explorer.addProject', async () => {
+      const input = await window.showInputBox({
+          placeHolder: 'Project_Name',
+          prompt: 'Enter name of project',
+      });
+      if (input) {
+          await doppler.projects.add(input);
+          window.showInformationMessage(`Successfully added ${input}`);
+          await commands.executeCommand("doppler.explorer.refresh");
+      }
+    });
+
+    commands.registerCommand(
+        'doppler.addEnvironment',
+        async (args: any) => {
+            const project = args.project;
+            const input = await window.showInputBox({
+                placeHolder: 'Environment_Name',
+                prompt: 'Enter name of environment (no special characters or spaces)',
+            });
+            if (input) {
+                await doppler
+                    .environments.add(project, input);
+                window.showInformationMessage(
+                    `Successfully added ${input} to ${project}`
+                );
+                await commands.executeCommand("doppler.explorer.refresh");
+            }
+        }
+    );
+    commands.registerCommand(
+        'doppler.addConfig',
+        async (args: any) => {
+          const environment = args.environment;
+          const project = args.project;
+          const input = await window.showInputBox({
+              placeHolder: 'Config_Name',
+              prompt: 'Enter name of config',
+          });
+          if (input) {
+              await doppler
+                  .configs.add(
+                      project,
+                      environment,
+                      input
+                  );
+              window.showInformationMessage(
+                  `Successfully added ${input} to ${environment} in ${project}`
+              );
+              await commands.executeCommand("doppler.explorer.refresh");
+          }
+        }
+    );
   }
 
   // Required part of the TextDocumentContentProvider interface
@@ -64,6 +119,7 @@ export default class DopplerEditorProvider implements TreeDataProvider<Entry>, T
     };
 
     return {
+      contextValue: element.type.toString(),
       iconPath: new ThemeIcon(icons[element.type]),
       resourceUri: element.uri,
       collapsibleState: element.isDirectory ? TreeItemCollapsibleState.Collapsed : undefined,
