@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Trufflehog
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Extract branch name
         shell: bash
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     name: NPM Linter
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: NPM Build
         run: npm install --frozen-lockfile
       - run: set -eo pipefail; npm run lint 2>&1| tee ./linter-report.txt
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     name: NPM Prettier
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: NPM Build
         run: npm install --frozen-lockfile
       - run: set -eo pipefail; npm run prettier 2>&1| tee ./prettier-report.txt
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     name: NPM Typecheck
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: NPM Build
         run: npm install --frozen-lockfile
       - run: set -eo pipefail; npm run typecheck 2>&1| tee ./typecheck-report.txt
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     name: NPM Audit
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: set -eo pipefail; npm audit --omit=dev 2>&1| tee ./audit-report.txt
       - uses: actions/upload-artifact@master
         if: always()
