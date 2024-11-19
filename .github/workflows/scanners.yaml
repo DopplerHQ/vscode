@@ -69,7 +69,7 @@ jobs:
     name: NPM Audit
     steps:
       - uses: actions/checkout@v2
-      - run: set -eo pipefail; npm audit 2>&1| tee ./audit-report.txt
+      - run: set -eo pipefail; npm audit --omit=dev 2>&1| tee ./audit-report.txt
       - uses: actions/upload-artifact@master
         if: always()
         with:
