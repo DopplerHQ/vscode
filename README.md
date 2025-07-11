@@ -125,6 +125,12 @@ Once the `vscode` project exists, you can execute the tests by running the follo
 npm run test-local
 ```
 
+## Releasing
+
+To release a new version, just update the `version` in `package.json` and merge the change into `master`.
+
+The release workflow checks if a Git tag for the version in `package.json` already exists. If the tag doesn't exist, it builds the extension, creates a GitHub release (+ tag), and publishes it to the VS Code and OVSX Marketplaces.
+
 ## Contributing
 
 If you want to contribute to this project, you can do so by forking the repository and submitting a pull request.
