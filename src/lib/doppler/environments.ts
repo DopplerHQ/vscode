@@ -22,4 +22,13 @@ export class DopplerEnvironmentsProvider {
 
     return response.environments as DopplerEnvironment[];
   }
+
+  public async add(project: string, name: string) {
+    const response = await this.request.post(`/v3/environments?project=${project}`, {
+      name: name.trim(),
+      slug: name.trim().replace(/\s/g, '-').toLowerCase()
+    });
+
+    return response.config as DopplerEnvironment;
+  }
 }

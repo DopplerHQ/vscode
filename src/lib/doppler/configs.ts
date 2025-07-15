@@ -25,4 +25,14 @@ export class DopplerConfigsProvider {
 
     return response.configs as DopplerConfig[];
   }
+
+  public async add(project: string, environment: string, name: string) {
+    const response = await this.request.post('/v3/configs', {
+      project,
+      environment,
+      name: name.trim(),
+    });
+
+    return response.config as DopplerConfig;
+  }
 }
